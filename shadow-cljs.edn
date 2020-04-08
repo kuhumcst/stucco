@@ -1,0 +1,12 @@
+{:deps     {:aliases [:dev :test]}
+ :dev-http {7000 "classpath:public"}
+ :nrepl    {:port    7900
+            :init-ns dev}
+ :builds   {:dev  {:target     :browser
+                   :output-dir "resources/public/js/compiled"
+                   :asset-path "/js/compiled"
+                   :modules    {:main {:init-fn user/start-dev}}}
+            :test {:target   :browser-test
+                   :test-dir "resources/public/js/test"
+                   :devtools {:http-port 7100
+                              :http-root "resources/public/js/test"}}}}
