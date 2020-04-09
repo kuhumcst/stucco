@@ -2,6 +2,7 @@
   (:require [clojure.pprint :refer [pprint]]
             [reagent.core :as r]
             [reagent.dom :as rdom]
+            [reagent.ratom :as ratom]
             [kuhumcst.recap.tab :as tab]))
 
 (def lorem-ipsum-1
@@ -26,53 +27,79 @@
   laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu,
   feugiat in, orci. In hac habitasse platea dictumst.")
 
-(defonce kvs
-  (r/atom [["Lorem ipsum" [:<>
-                           [:p lorem-ipsum-1]
-                           [:p lorem-ipsum-2]]]
-           ["Something else" [:<>
-                              [:h1 "A title"]
-                              [:p "Something entirely different"]]]
-           ["Third tab" [:<>
-                         [:h1 "More lorem ipsum"]
-                         [:p lorem-ipsum-1]]]
-           ["Fourth" [:<>
-                      [:h1 "Even more lorem ipsum!!!"]
-                      [:p lorem-ipsum-2]]]]))
+(def tabs-big
+  [["Lorem ipsum" [:<>
+                   [:p lorem-ipsum-1]
+                   [:p lorem-ipsum-2]]]
+   ["Something else" [:<>
+                      [:h1 "A title"]
+                      [:p "Something entirely different"]]]
+   ["Third tab" [:<>
+                 [:h1 "More lorem ipsum"]
+                 [:p lorem-ipsum-1]]]
+   ["Fourth" [:<>
+              [:h1 "Even more lorem ipsum!!!"]
+              [:p lorem-ipsum-2]]]])
 
-(defonce i-ratom
-  (r/atom 0))
+(def tabs-small
+  [["1" "One"]
+   ["2" "Two"]
+   ["3" "Three"]
+   ["4" "Four"]])
 
-(defonce i-map
-  (r/atom 0))
+(defonce tabs-ratom
+  (r/atom {:tabs tabs-big
+           :i    0}))
 
-(defonce i-meta
-  (r/atom 0))
+(defonce tabs-ratom-for-cursor
+  (r/atom {:a {:b {:c {:tabs tabs-small
+                       :i    2}}}}))
+
+(defonce tabs-cursor
+  (r/cursor tabs-ratom-for-cursor [:a :b :c]))
+
+
+(defonce tabs-ratom-for-reaction
+  (r/atom {:tabs tabs-small
+           :i    1}))
+
+(defonce tabs-reaction
+  (ratom/make-reaction #(deref tabs-ratom-for-reaction)
+                       :on-set (fn [_ v] (reset! tabs-ratom-for-reaction v))))
+
+
+(defonce tabs-ratom-for-wrapper
+  (r/atom {:tabs tabs-small
+           :i    1}))
 
 (defn app
   []
   [:<>
-   ;; Using a ratoms as state.
-   [tab/window {:kvs kvs
-                :i   i-ratom}]
+   ;; Using ratom as state.
+   [tab/combined tabs-ratom]
    [:br]
 
-   ;; Dispatching on maps.
-   [tab/window {:kvs {:deref  #(deref kvs)
-                      :reset! #(reset! kvs %)
-                      :swap!  #(swap! kvs % %)}
-                :i   {:deref  #(deref i-map)
-                      :reset! #(reset! i-map %)
-                      :swap!  #(swap! i-map % %)}}]
+   ;; Using cursor as state.
+   [:pre
+    "cursor: " (with-out-str (pprint @tabs-cursor))
+    "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
+   [tab/combined tabs-cursor]
    [:br]
 
-   ;; Dispatching on metadata.
-   [tab/window {:kvs ^{:deref  #(deref kvs)
-                       :reset! #(reset! kvs %)
-                       :swap!  #(swap! kvs % %)} [:n/a]
-                :i ^{:deref  #(deref i-meta)
-                     :reset! #(reset! i-meta %)
-                     :swap!  #(swap! i-meta % %)} [:n/a]}]])
+   ;; Using reaction as state.
+   [:pre
+    "reaction ratom: " (with-out-str (pprint @tabs-reaction))
+    "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
+   [tab/combined tabs-reaction]
+   [:br]
+
+   ;; Using wrap as state.
+   [:pre
+    "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
+    "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
+   [tab/combined (r/wrap @tabs-ratom-for-wrapper
+                         reset! tabs-ratom-for-wrapper)]
+   [:br]])
 
 (def root
   (js/document.getElementById "app"))

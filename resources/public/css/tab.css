@@ -57,6 +57,10 @@
 .tab-head__spacer {
     flex-grow: 1;
     border-bottom: 1px solid #888;
+
+    /* Hide the internal text (... which provides a box with no css). */
+    color: transparent;
+    user-select: none;
 }
 
 /* The body is also an independent block. */
