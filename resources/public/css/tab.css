@@ -21,12 +21,11 @@
     letter-spacing: 2px;
 }
 
-.tab-head label:hover {
-    color: #444;
-    background-color: #EEE;
+.tab-head input[type=radio] {
+    display: none;
 }
 
-.tab-head input[checked] ~ label {
+.tab-head input:checked ~ label {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
@@ -41,7 +40,7 @@
     border-radius: 0 4px 0 0;
 }
 
-.tab-head input[checked] + label {
+.tab-head input:checked + label {
     cursor: default;
     background: white;
     border-bottom: none;
@@ -49,8 +48,18 @@
     color: black;
 }
 
-.tab-head input[type=radio] {
-    display: none;
+/* Keeping the outline (the default behaviour) sucks. */
+.tab-head label:active {
+    outline: none;
+}
+
+.tab-head label:hover,
+.tab-head label:focus {
+    color: #444;
+    background-color: #EEE;
+
+    /* Fix missing outline border on infixed labels. */
+    z-index: 1;
 }
 
 /* The spacer element is needed to draw the remaining bottom border. */

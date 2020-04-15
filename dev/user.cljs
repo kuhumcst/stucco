@@ -76,29 +76,29 @@
   []
   [:<>
    ;; Using ratom as state.
-   [tab/combined tabs-ratom]
+   [tab/full tabs-ratom]
    [:br]
 
    ;; Using cursor as state.
    [:pre
     "cursor: " (with-out-str (pprint @tabs-cursor))
     "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tab/combined tabs-cursor]
+   [tab/full tabs-cursor]
    [:br]
 
    ;; Using reaction as state.
    [:pre
     "reaction ratom: " (with-out-str (pprint @tabs-reaction))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tab/combined tabs-reaction]
+   [tab/full tabs-reaction]
    [:br]
 
    ;; Using wrap as state.
    [:pre
     "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
-   [tab/combined (r/wrap @tabs-ratom-for-wrapper
-                         reset! tabs-ratom-for-wrapper)]
+   [tab/full (r/wrap @tabs-ratom-for-wrapper
+                     reset! tabs-ratom-for-wrapper)]
    [:br]])
 
 (def root
