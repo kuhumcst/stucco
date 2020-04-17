@@ -1,10 +1,12 @@
-(ns kuhumcst.recap.tab
+(ns kuhumcst.recap.tabs
   "Reagent components for creating a tabbed UI.
 
-  Shared state of the tab components:
-
+  Shared state for tab components:
     `tabs` - key-value pairs of tab labels and bodies.
-    `i`    - (optional) the index of the currently selected tab."
+    `i`    - (optional) the index of the currently selected tab.
+
+  ARIA reference:
+    https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
   (:require [kuhumcst.recap.drag :as rd]
             [kuhumcst.recap.util :as util]))
 
@@ -12,7 +14,7 @@
 ;; TODO: deterministic random background colour of the tab labels
 ;;       cycle through a set of standard colours and set as metadata on key-value pair
 
-(defn- drag-tab
+(defn- mk-drag-state
   [{:keys [tabs i] :or {i 0}} n tab]
   {:tabs (util/vec-dissoc tabs n)
    :i    (cond
@@ -20,7 +22,7 @@
            (< n i) (dec i)
            :else i)})
 
-(defn- drop-tab
+(defn- mk-drop-state
   [{:keys [tabs i] :or {i 0}} n tab]
   {:tabs (util/vec-assoc tabs n tab)
    :i    (cond
@@ -28,26 +30,26 @@
            (<= n i) (inc i)
            :else i)})
 
-(defn head
-  "The head of labels available in the tabs `state`."
+(defn tablist
+  "The tabs available in the `state`."
   [state]
   (let [form-id (random-uuid)]
     (fn [state]
       (let [{:keys [tabs i] :or {i 0}} @state
             append (fn [tab]
                      (if (= form-id (:form-id (meta tab)))
-                       (swap! state drop-tab (dec (count tabs)) tab)
-                       (swap! state drop-tab (count tabs) tab)))]
-        [:form.tab-head
+                       (swap! state mk-drop-state (dec (count tabs)) tab)
+                       (swap! state mk-drop-state (count tabs) tab)))]
+        [:form.tablist
          (for [n (range (count tabs))
                :let [[k _ :as tab] (with-meta (nth tabs n)
                                               {:form-id   form-id
                                                :selected? (= n i)})
                      delete (fn []
-                              (swap! state drag-tab n tab)
+                              (swap! state mk-drag-state n tab)
                               tab)
                      insert (fn [tab]
-                              (swap! state drop-tab n tab))
+                              (swap! state mk-drop-state n tab))
                      select (fn []
                               (swap! state assoc :i n))]]
            [:<> {:key (hash [tabs i n])}
@@ -60,22 +62,22 @@
                             :on-drag-over  (rd/on-drag-over)
                             :on-drop       (rd/on-drop insert)})
              k]])
-         [:span.tab-head__spacer {:on-drag-over (rd/on-drag-over)
-                                  :on-drop      (rd/on-drop append)}
+         [:span.tablist__spacer {:on-drag-over (rd/on-drag-over)
+                                 :on-drop      (rd/on-drop append)}
           "[+ tab]"]]))))
 
-(defn body
-  "The currently selected body in the tabs `state`."
+(defn tabpanel
+  "The currently selected tabpanel of the `state`."
   [state]
   (let [{:keys [tabs i] :or {i 0}} @state
         [_ v] (when (not-empty tabs)
                 (nth tabs i))]
-    [:section.tab-body v]))
+    [:section.tabpanel v]))
 
-(defn full
-  "A merged view of the tab headers and the body of the currently selected tab.
-  Takes tabs `state` of the form described in the docstring of this namespace."
+(defn tabs
+  "A merged view of the tablist and the tabpanel of the currently selected tab.
+  Takes `state` of the form described in the docstring of this namespace."
   [state]
-  [:article.tab-combined
-   [head state]
-   [body state]])
+  [:article.tabs
+   [tablist state]
+   [tabpanel state]])

@@ -1,11 +1,11 @@
 /* The head is an independent block. */
-.tab-head {
+.tablist {
     display: flex;
     font-family: Futura, sans-serif;
     font-size: 14px;
 }
 
-.tab-head label {
+.tablist label {
     transition: color 0.3s, background-color 0.3s;
     cursor: pointer;
     padding: 8px 40px;
@@ -21,26 +21,26 @@
     letter-spacing: 2px;
 }
 
-.tab-head input[type=radio] {
+.tablist input[type=radio] {
     display: none;
 }
 
-.tab-head input:checked ~ label {
+.tablist input:checked ~ label {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
 }
 
-.tab-head label:first-of-type {
+.tablist label:first-of-type {
     border-radius: 4px 0 0 0;
 }
 
-.tab-head label:last-of-type {
+.tablist label:last-of-type {
     border-right: 1px solid #888;
     border-radius: 0 4px 0 0;
 }
 
-.tab-head input:checked + label {
+.tablist input:checked + label {
     cursor: default;
     background: white;
     border-bottom: none;
@@ -49,12 +49,12 @@
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
-.tab-head label:active {
+.tablist label:active {
     outline: none;
 }
 
-.tab-head label:hover,
-.tab-head label:focus {
+.tablist label:hover,
+.tablist label:focus {
     color: #444;
     background-color: #EEE;
 
@@ -63,7 +63,7 @@
 }
 
 /* The spacer element is needed to draw the remaining bottom border. */
-.tab-head__spacer {
+.tablist__spacer {
     flex-grow: 1;
     border-bottom: 1px solid #888;
 
@@ -73,12 +73,12 @@
 }
 
 /* The body is also an independent block. */
-.tab-body {
+.tabpanel {
     border: 1px solid #888;
     padding: 10px;
 }
 
-/* The visual merging of tab-head and tab-body is only based on placement. */
-.tab-head + .tab-body {
+/* The visual merging of tablist and tabpanel is only based on placement. */
+.tablist + .tabpanel {
     border-top: none;
 }

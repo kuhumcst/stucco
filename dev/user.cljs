@@ -3,7 +3,9 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [kuhumcst.recap.tab :as tab]))
+            [kuhumcst.recap.structure.core :as structure]
+            [kuhumcst.recap.structure.landmarks :as landmarks]
+            [kuhumcst.recap.tabs :refer [tabs]]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -72,33 +74,49 @@
   (r/atom {:tabs tabs-small
            :i    1}))
 
+(def landmarks
+  {:banner        [landmarks/banner
+                   [landmarks/search {:aria-label "ib"}
+                    "banner > search"]]
+   :complementary [landmarks/complementary {:aria-label "john"}
+                   [landmarks/form {:aria-label "karsten"}
+                    "complementary > form"]]
+   :contentinfo   [landmarks/contentinfo
+                   [landmarks/region {:aria-label "palle"}
+                    "contentinfo > region"]]
+   :main          [landmarks/main
+                   [landmarks/navigation {:aria-label "ludvig"}
+                    "main > navigation"]]})
+
 (defn app
   []
   [:<>
+   [structure/generic landmarks]
+
    ;; Using ratom as state.
-   [tab/full tabs-ratom]
+   [tabs tabs-ratom]
    [:br]
 
    ;; Using cursor as state.
    [:pre
     "cursor: " (with-out-str (pprint @tabs-cursor))
     "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tab/full tabs-cursor]
+   [tabs tabs-cursor]
    [:br]
 
    ;; Using reaction as state.
    [:pre
     "reaction ratom: " (with-out-str (pprint @tabs-reaction))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tab/full tabs-reaction]
+   [tabs tabs-reaction]
    [:br]
 
    ;; Using wrap as state.
    [:pre
     "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
-   [tab/full (r/wrap @tabs-ratom-for-wrapper
-                     reset! tabs-ratom-for-wrapper)]
+   [tabs (r/wrap @tabs-ratom-for-wrapper
+                 reset! tabs-ratom-for-wrapper)]
    [:br]])
 
 (def root
