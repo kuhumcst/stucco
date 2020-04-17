@@ -3,8 +3,8 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [kuhumcst.recap.structure.core :as structure]
-            [kuhumcst.recap.structure.landmarks :as landmarks]
+            [kuhumcst.recap.layout.core :as layout]
+            [kuhumcst.recap.layout.landmarks :as landmarks]
             [kuhumcst.recap.tabs :refer [tabs]]))
 
 (def lorem-ipsum-1
@@ -91,7 +91,7 @@
 (defn app
   []
   [:<>
-   [structure/generic landmarks]
+   [layout/generic landmarks]
 
    ;; Using ratom as state.
    [tabs tabs-ratom]
