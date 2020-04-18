@@ -1,13 +1,14 @@
 /* The head is an independent block. */
 .tablist {
     display: flex;
-    font-family: Futura, sans-serif;
-    font-size: 14px;
 }
 
-.tablist label {
+.tablist .tab {
     transition: color 0.3s, background-color 0.3s;
     cursor: pointer;
+    color: #444;
+    font-size: 14px;
+    font-family: Futura, sans-serif;
     padding: 8px 40px;
     display: inline-block;
     background: #CCC;
@@ -16,50 +17,45 @@
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
     border: 1px solid #888;
     border-right: none;
-    color: #666;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
-.tablist input[type=radio] {
-    display: none;
-}
-
-.tablist input:checked ~ label {
+.tablist .tab[aria-selected="true"] ~ .tab {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
 }
 
-.tablist label:first-of-type {
+.tablist .tab:first-child {
     border-radius: 4px 0 0 0;
 }
 
-.tablist label:last-of-type {
+.tablist .tab:nth-last-child(2) {
     border-right: 1px solid #888;
     border-radius: 0 4px 0 0;
 }
 
-.tablist input:checked + label {
-    cursor: default;
-    background: white;
-    border-bottom: none;
-    box-shadow: none;
-    color: black;
-}
-
 /* Keeping the outline (the default behaviour) sucks. */
-.tablist label:active {
+.tablist .tab:active {
     outline: none;
 }
 
-.tablist label:hover,
-.tablist label:focus {
-    color: #444;
+.tablist .tab:hover,
+.tablist .tab:focus {
     background-color: #EEE;
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
+}
+
+.tablist .tab[aria-selected="true"] {
+    cursor: default;
+    background: white;
+    border-bottom: none;
+    padding-bottom: 9px; /* Re-adding 1px from missing border. */
+    box-shadow: none;
+    color: black;
 }
 
 /* The spacer element is needed to draw the remaining bottom border. */

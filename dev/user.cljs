@@ -94,21 +94,21 @@
    [layout/generic landmarks]
 
    ;; Using ratom as state.
-   [tabs tabs-ratom]
+   [tabs tabs-ratom {}]
    [:br]
 
    ;; Using cursor as state.
    [:pre
     "cursor: " (with-out-str (pprint @tabs-cursor))
     "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tabs tabs-cursor]
+   [tabs tabs-cursor {:tablist-id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
    [:pre
     "reaction ratom: " (with-out-str (pprint @tabs-reaction))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tabs tabs-reaction]
+   [tabs tabs-reaction {:tablist-id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
@@ -116,7 +116,8 @@
     "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
    [tabs (r/wrap @tabs-ratom-for-wrapper
-                 reset! tabs-ratom-for-wrapper)]
+                 reset! tabs-ratom-for-wrapper)
+    {:tablist-id "wrapper"}]
    [:br]])
 
 (def root
