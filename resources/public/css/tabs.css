@@ -1,15 +1,15 @@
-/* The head is an independent block. */
-.tablist {
+.tab-list {
     display: flex;
 }
 
-.tablist .tab {
-    transition: color 0.3s, background-color 0.3s;
+.tab-list .tab {
+    transition: background-color 0.3s;
     cursor: pointer;
-    color: #444;
+    color: #222;
     font-size: 14px;
     font-family: Futura, sans-serif;
     padding: 8px 40px;
+    margin: 0; /* Remove default button margin (for Safari). */
     display: inline-block;
     background: #CCC;
     box-shadow:
@@ -21,45 +21,44 @@
     letter-spacing: 2px;
 }
 
-.tablist .tab[aria-selected="true"] ~ .tab {
+.tab-list .tab[aria-selected="true"] ~ .tab {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
 }
 
-.tablist .tab:first-child {
+.tab-list .tab:first-child {
     border-radius: 4px 0 0 0;
 }
 
-.tablist .tab:nth-last-child(2) {
+.tab-list .tab:nth-last-child(2) {
     border-right: 1px solid #888;
     border-radius: 0 4px 0 0;
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
-.tablist .tab:active {
+.tab-list .tab:active {
     outline: none;
 }
 
-.tablist .tab:hover,
-.tablist .tab:focus {
+.tab-list .tab:hover,
+.tab-list .tab:focus {
     background-color: #EEE;
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
 }
 
-.tablist .tab[aria-selected="true"] {
+.tab-list .tab[aria-selected="true"] {
     cursor: default;
     background: white;
     border-bottom: none;
     padding-bottom: 9px; /* Re-adding 1px from missing border. */
     box-shadow: none;
-    color: black;
 }
 
 /* The spacer element is needed to draw the remaining bottom border. */
-.tablist__spacer {
+.tab-list__spacer {
     flex-grow: 1;
     border-bottom: 1px solid #888;
 
@@ -68,13 +67,12 @@
     user-select: none;
 }
 
-/* The body is also an independent block. */
-.tabpanel {
+.tab-panel {
     border: 1px solid #888;
     padding: 10px;
 }
 
-/* The visual merging of tablist and tabpanel is only based on placement. */
-.tablist + .tabpanel {
+/* The visual merging of tab-list and tab-panel is only based on placement. */
+.tab-list + .tab-panel {
     border-top: none;
 }

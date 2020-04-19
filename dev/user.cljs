@@ -81,7 +81,7 @@
    :complementary [landmarks/complementary {:aria-label "john"}
                    [landmarks/form {:aria-label "karsten"}
                     "complementary > form"]]
-   :contentinfo   [landmarks/contentinfo
+   :content-info  [landmarks/content-info
                    [landmarks/region {:aria-label "palle"}
                     "contentinfo > region"]]
    :main          [landmarks/main
@@ -91,7 +91,7 @@
 (defn app
   []
   [:<>
-   [layout/generic landmarks]
+   [layout/root landmarks]
 
    ;; Using ratom as state.
    [tabs tabs-ratom {}]
@@ -101,14 +101,14 @@
    [:pre
     "cursor: " (with-out-str (pprint @tabs-cursor))
     "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tabs tabs-cursor {:tablist-id "cursor"}]
+   [tabs tabs-cursor {:tab-list-id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
    [:pre
     "reaction ratom: " (with-out-str (pprint @tabs-reaction))
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tabs tabs-reaction {:tablist-id "reaction"}]
+   [tabs tabs-reaction {:tab-list-id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
@@ -117,7 +117,7 @@
     "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
    [tabs (r/wrap @tabs-ratom-for-wrapper
                  reset! tabs-ratom-for-wrapper)
-    {:tablist-id "wrapper"}]
+    {:tab-list-id "wrapper"}]
    [:br]])
 
 (def root

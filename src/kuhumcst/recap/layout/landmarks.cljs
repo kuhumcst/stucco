@@ -4,12 +4,12 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark")
 
+;; Required for landmarks that allow multiple instances.
 (defn- assert-label
-  "Throw exception if a landmark is unlabeled. Labeling is required for
-  landmarks that allow multiple instances."
-  [landmark {:keys [aria-label aria-labelledby] :as attr}]
-  (when (not (or aria-label aria-labelledby))
-    (throw (ex-info (str landmark " landmark is unlabeled.") attr))))
+  "Assert from the `attr` that the `landmark-type` is labeled."
+  [landmark-type {:keys [aria-label aria-labelledby] :as attr}]
+  (assert (or aria-label aria-labelledby)
+          (str landmark-type " landmark-type is unlabeled: " attr)))
 
 (defn banner
   "Identifies site-oriented content at the beginning of a document, i.e. things
@@ -28,7 +28,7 @@
   (assert-label "complementary" attr)
   (into [:aside] content))
 
-(defn contentinfo
+(defn content-info
   "Identifies common information at the bottom of each page within a website,
   such as copyrights and links to privacy and accessibility statements.
 

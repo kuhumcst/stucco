@@ -11,17 +11,19 @@ Malleable user interfaces
 Academic software is often developed for a specialised purpose and in a relatively short amount of time. End users of academic software typically have their own particular workflows, so it makes sense that the UI for such software can accommodate a wide range of needs. Furthermore, academic software is in a unique disposition:
 
 * It must be maintained for much longer than most other production software.
-* There is often little incentive/budget to enhance or extend the software after the point of delivery.
+* There is often little incentive/budget to enhance or extend the software past the point of delivery.
 
-Anticipating both the current and future needs of end users, UIs built with `recap` get a high degree of customisability _"for free"_. Most of the components can be reordered or otherwise customised by the end user to fit their individual workflow. Knowing that fashion is fleeting, the designs of the components do not necessarily follow the trend of the day, but instead lean towards a more utilitarian, evergreen style.
+Anticipating both the current and future needs of end users, UIs built with `recap` get a high degree of customisability _for "free"_. Most of the components can be reordered or otherwise customised by the end user to fit their individual workflow. Knowing that fashion is fleeting, the designs of the components do not necessarily follow the trend of the day, but instead lean towards a more utilitarian, evergreen style.
 
 Accessibility semantics
 -----------------------
 All the components in this library aspire to comply with the [EU Web Accessibility Directive](https://en.wikipedia.org/wiki/Web_Accessibility_Directive) and the relevant [Danish law](https://www.retsinformation.dk/Forms/r0710.aspx?id=201794). In practice, this means compliance with [WCAG 2.1](https://www.w3.org/TR/WCAG21/) which is a guideline from the World Wide Web Consortium.
 
-The components try to match the [official W3C terminology](https://www.w3.org/TR/wai-aria-practices-1.1/) as much as possible, e.g. the `tabs` component consists of a `tablist` and the currently selected `tabpanel`. The deliberate use of "boring" names for components is also done as a service towards the developers that may be using this library.
+Full accessibility is really _hard_ to get right in web applications. The aim of the library is to have any UI built with it be broadly accessible. To this effect, the components mostly follow the [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/). Only the contextual parts that _cannot_ be automatically deduced are made the responsibility of the developer. Runtime assertions are used as an enforcement mechanism.
 
-Moreover, ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis for building page structure in `recap`, making the process entirely declarative while enforcing accessibility. Focusing purely on semantics also allows both the developer and the end user to hot swap the page structure.
+The components also try to match the official W3C terminology as much as possible, e.g. the `tabs` component consists of a `tab-list` and the currently selected `tab-panel`. The deliberate use of well-established names for components is also a service towards the developers that may be using this library.
+
+Moreover, ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis of layout in `recap`, making the process entirely declarative whilst coercing an accessible HTML structure. Focusing purely on semantics also allows the developer (or the end user) to hot swap the overall layout. For this reason, accessibility should not just be seen as an obstacle, but as a set of semantic constraints that work in synergy with the goal of creating a malleable UI. 
 
 Connecting through shared state
 -------------------------------

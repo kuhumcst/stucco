@@ -4,20 +4,20 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark")
 
+;; Some landmarks only allow single instances, e.g. banner or main.
 (defn- assert-single-element
-  "Throw exception if a specified top-level landmark has multiple instances.
-  Not all landmarks allow multiple instances."
-  [landmark [tag & _ :as data]]
-  (when (and data
-             (not (or (keyword? tag)
-                      (fn? tag))))
-    (throw (ex-info (str landmark " is not a single element.") data))))
+  "Assert from hiccup `data` that the `landmark-type` is a single instance."
+  [landmark-type [tag & _ :as data]]
+  (assert (or (and (keyword? tag)
+                   (not= :<> tag))
+              (fn? tag))
+          (str landmark-type " is not a single element: " data)))
 
-(defn generic
-  "Generic page layout for the top-level `landmarks`."
+(defn root
+  "Root layout comprised of the top-level `landmarks`."
   [{:keys [banner
            complementary
-           contentinfo
+           content-info
            main]
     :as   landmarks}]
   (assert-single-element "banner" banner)
@@ -26,4 +26,4 @@
    banner
    main
    complementary
-   contentinfo])
+   content-info])

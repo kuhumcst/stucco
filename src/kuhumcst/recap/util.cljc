@@ -10,7 +10,7 @@
   (let [[before after] (split-at n coll)]
     (vec (concat before [v] after))))
 
-;; TODO: not in use - re-evaluate existence?
+;; TODO: rewrite or re-evaluate existence?
 ;; For keyboard selection and accessibility in general.
 (defn- tab-attr
   "Get attr map for element that should be made tabbable based on `on-click`.
