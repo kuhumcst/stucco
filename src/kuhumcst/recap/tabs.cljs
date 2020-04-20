@@ -44,7 +44,7 @@
   [state {:keys [tab-list-id] :as opts}]
   (let [{:keys [tabs i] :or {i 0}} @state
         append (fn [tab]
-                 (if
+                 (if (= tab-list-id (:tab-list-id (meta tab)))
                    (swap! state mk-drop-state (dec (count tabs)) tab)
                    (swap! state mk-drop-state (count tabs) tab)))]
     [:div.tab-list {:id   tab-list-id
