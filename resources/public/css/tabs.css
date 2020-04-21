@@ -3,11 +3,13 @@
 }
 
 .tab-list .tab {
+    white-space: nowrap;
     transition: background-color 0.3s;
-    cursor: pointer;
+    cursor: grab;
     color: #222;
     font-size: 14px;
     font-family: Futura, sans-serif;
+    text-align: center;
     padding: 8px 40px;
     margin: 0; /* Remove default button margin (for Safari). */
     display: inline-block;
@@ -21,6 +23,26 @@
     letter-spacing: 2px;
 }
 
+.tab-list .tab-dropzone {
+    transition: border 0.3s;
+    flex-grow: 1;
+    height: 36px;
+    border: 1px solid #DDD;
+    border-bottom: 1px solid #888;
+    border-left: none;
+    border-top-right-radius: 4px;
+    box-shadow:
+        inset 8px 0px 16px -8px rgba(0,0,0,0.1),
+        inset -8px 0px 16px -8px rgba(0,0,0,0.1),
+        inset 0px -8px 16px -8px rgba(0,0,0,0.1);
+}
+
+/* An empty tab-list (= only a dropzone). */
+.tab-list .tab-dropzone:first-child {
+    border-top-left-radius: 4px;
+    border: 1px solid #DDD;
+}
+
 .tab-list .tab[aria-selected="true"] ~ .tab {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
@@ -28,12 +50,16 @@
 }
 
 .tab-list .tab:first-child {
-    border-radius: 4px 0 0 0;
+    border-top-left-radius: 4px;
 }
+
 
 .tab-list .tab:nth-last-child(2) {
     border-right: 1px solid #888;
-    border-radius: 0 4px 0 0;
+}
+
+.tab-list .tab:last-child {
+    border-top-right-radius: 4px;
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
@@ -50,29 +76,19 @@
 }
 
 .tab-list .tab[aria-selected="true"] {
-    cursor: default;
     background: white;
     border-bottom: none;
     padding-bottom: 9px; /* Re-adding 1px from missing border. */
     box-shadow: none;
 }
 
-/* The spacer element is needed to draw the remaining bottom border. */
-.tab-list__spacer {
-    flex-grow: 1;
-    border-bottom: 1px solid #888;
-
-    /* Hide the internal text (... which provides a box with no css). */
-    color: transparent;
-    user-select: none;
-}
-
 .tab-panel {
     border: 1px solid #888;
-    padding: 10px;
+    border-radius: 4px;
 }
 
 /* The visual merging of tab-list and tab-panel is only based on placement. */
 .tab-list + .tab-panel {
     border-top: none;
+    border-radius: 0 0 4px 4px;
 }

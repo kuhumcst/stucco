@@ -1,0 +1,25 @@
+.code-lens {
+    display: block;
+    overflow: auto;
+    background: white;
+    border: 1px solid #888;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    min-height: 1em;
+}
+
+.code-lens--empty {
+    display: inline-block;
+    color: #AAA;
+}
+
+.code-lens__meta {
+    color: darkblue;
+    background: #EEEEFF;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-style: italic;
+    margin-bottom: 8px;
+}

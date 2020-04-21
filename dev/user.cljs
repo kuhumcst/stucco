@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
+            [kuhumcst.recap.lens :as lens]
             [kuhumcst.recap.layout.core :as layout]
             [kuhumcst.recap.layout.landmarks :as landmarks]
             [kuhumcst.recap.tabs :refer [tabs]]))
@@ -29,41 +30,46 @@
   laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu,
   feugiat in, orci. In hac habitasse platea dictumst.")
 
+(defn padded
+  [element]
+  [:div {:style {:padding 10}}
+   element])
+
 (def tabs-big
-  [["Lorem ipsum" [:<>
+  [["Lorem ipsum" [padded
                    [:p lorem-ipsum-1]
                    [:p lorem-ipsum-2]]]
-   ["Something else" [:<>
+   ["Something else" [padded
                       [:h1 "A title"]
                       [:p "Something entirely different"]]]
-   ["Third tab" [:<>
+   ["Third tab" [padded
                  [:h1 "More lorem ipsum"]
                  [:p lorem-ipsum-1]]]
-   ["Fourth" [:<>
+   ["Fourth" [padded
               [:h1 "Even more lorem ipsum!!!"]
               [:p lorem-ipsum-2]]]])
 
 (def tabs-small
-  [["1" "One"]
-   ["2" "Two"]
-   ["3" "Three"]
-   ["4" "Four"]])
+  [["1" [padded "One"]]
+   ["2" [padded "Two"]]
+   ["3" [padded "Three"]]
+   ["4" [padded "Four"]]])
 
 (defonce tabs-ratom
-  (r/atom {:tabs tabs-big
-           :i    0}))
+  (r/atom {:kvs tabs-big
+           :i   0}))
 
 (defonce tabs-ratom-for-cursor
-  (r/atom {:a {:b {:c {:tabs tabs-small
-                       :i    2}}}}))
+  (r/atom {:a {:b {:c {:kvs tabs-small
+                       :i   2}}}}))
 
 (defonce tabs-cursor
   (r/cursor tabs-ratom-for-cursor [:a :b :c]))
 
 
 (defonce tabs-ratom-for-reaction
-  (r/atom {:tabs tabs-small
-           :i    1}))
+  (r/atom {:kvs tabs-small
+           :i   1}))
 
 (defonce tabs-reaction
   (ratom/make-reaction #(deref tabs-ratom-for-reaction)
@@ -71,8 +77,8 @@
 
 
 (defonce tabs-ratom-for-wrapper
-  (r/atom {:tabs tabs-small
-           :i    1}))
+  (r/atom {:kvs tabs-small
+           :i   1}))
 
 (def landmarks
   {:banner        [landmarks/banner
@@ -88,33 +94,38 @@
                    [landmarks/navigation {:aria-label "ludvig"}
                     "main > navigation"]]})
 
+(defonce code-lens-state
+  (r/atom nil))
+
 (defn app
   []
   [:<>
-   [layout/root landmarks]
+   [lens/code code-lens-state]
+
+   #_[layout/root landmarks]
 
    ;; Using ratom as state.
-   [tabs tabs-ratom {}]
+   [tabs tabs-ratom {:tab-list-id "ratom"}]
    [:br]
 
    ;; Using cursor as state.
-   [:pre
-    "cursor: " (with-out-str (pprint @tabs-cursor))
-    "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
+   #_[:pre
+      "cursor: " (with-out-str (pprint @tabs-cursor))
+      "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
    [tabs tabs-cursor {:tab-list-id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
-   [:pre
-    "reaction ratom: " (with-out-str (pprint @tabs-reaction))
-    "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
+   #_[:pre
+      "reaction ratom: " (with-out-str (pprint @tabs-reaction))
+      "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
    [tabs tabs-reaction {:tab-list-id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
-   [:pre
-    "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
-    "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
+   #_[:pre
+      "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
+      "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
    [tabs (r/wrap @tabs-ratom-for-wrapper
                  reset! tabs-ratom-for-wrapper)
     {:tab-list-id "wrapper"}]
