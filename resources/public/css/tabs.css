@@ -7,11 +7,13 @@
     transition: var(--transition);
     cursor: grab;
     color: var(--color);
+    text-shadow: var(--text-shadow);
     font-size: var(--font-size);
     font-family: var(--heading-font-family);
     padding: var(--padding) var(--padding-xl);
     display: inline-block;
-    background: var(--inactive-background);
+    background: var(--background);
+    filter: var(--inactive-filter);
     box-shadow:
         inset -8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
@@ -68,7 +70,7 @@
 
 .tab-list .tab:hover,
 .tab-list .tab:focus {
-    background: var(--inactive-background-focus);
+    filter: var(--inactive-filter-focus);
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
@@ -76,6 +78,7 @@
 
 .tab-list .tab[aria-selected="true"] {
     background: var(--background);
+    filter: var(--filter);
     box-shadow: none;
 
     /* Extra padding making up for missing border. */

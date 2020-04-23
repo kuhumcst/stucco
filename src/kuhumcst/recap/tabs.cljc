@@ -16,8 +16,6 @@
 
 ;; TODO: fix - selecting a tab resets focus to an earlier tab in the list
 ;;       actually, this is OK, but tabs should be selected using arrow keys
-;; TODO: deterministic random background colour of the tab labels
-;;       cycle through a set of standard colours and set as metadata on key-value pair
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
@@ -40,23 +38,39 @@
   [tab-list-id n]
   (str tab-list-id "-" n))
 
+(defn heterostyled
+  "Apply heterogeneous styling to tab `kvs`."
+  [kvs]
+  (let [backgrounds (cycle (shuffle ["var(--tab-background-1)"
+                                     "var(--tab-background-2)"
+                                     "var(--tab-background-3)"
+                                     "var(--tab-background-4)"
+                                     "var(--tab-background-5)"]))
+        mk-style    (fn [m n]
+                      (assoc m :style {:background (nth backgrounds n)}))]
+    (into (empty kvs)
+          (map-indexed (fn [n kv]
+                         (vary-meta kv mk-style n))
+                       kvs))))
+
 (defn tab-list
   "The tabs available in the `state`."
   [state {:keys [tab-list-id] :as opts}]
   (state/assert-conforms ::state/kvs+i state)
   (let [{:keys [kvs i] :or {i 0}} @state
+        length (count kvs)
         append (fn [kv]
                  ;; Internal drops will have no increase in tab count, so when
                  ;; appending inside the same tab-list we must account for it.
                  (if (= tab-list-id (:tab-list-id (meta kv)))
-                   (swap! state mk-drop-state (dec (count kvs)) kv)
-                   (swap! state mk-drop-state (count kvs) kv)))]
+                   (swap! state mk-drop-state (dec length) kv)
+                   (swap! state mk-drop-state length kv)))]
     [:div.tab-list {:id   tab-list-id
                     :role "tab-list"}
-     (for [n (range (count kvs))
-           :let [kv     (with-meta (nth kvs n)
-                                   {:tab-list-id tab-list-id
-                                    :selected?   (= n i)})
+     (for [n (range length)
+           :let [kv     (vary-meta (nth kvs n) assoc
+                                   :tab-list-id tab-list-id
+                                   :selected? (= n i))
                  id     (mk-tab-id tab-list-id n)
                  delete (fn []
                           (swap! state mk-drag-state n)
@@ -69,6 +83,7 @@
        [:span.tab (merge (util/tab-attr select)
                          {:key           (hash [kvs i n])
                           :id            id
+                          :style         (:style (meta kv))
                           :aria-selected (:selected? (meta kv))
                           :draggable     true
                           :on-drag-start (rd/on-drag-start delete)
@@ -83,11 +98,11 @@
   [state {:keys [tab-list-id] :as opts}]
   (state/assert-conforms ::state/kvs+i state)
   (let [{:keys [kvs i] :or {i 0}} @state
-        [_ v] (when (not-empty kvs)
-                (nth kvs i))
-        tab-id (mk-tab-id tab-list-id i)]
+        [_ v :as kv] (when (not-empty kvs)
+                       (nth kvs i))]
     (when v
-      [:section.tab-panel {:aria-labelledby tab-id}
+      [:section.tab-panel {:aria-labelledby (mk-tab-id tab-list-id i)
+                           :style           (:style (meta kv))}
        v])))
 
 (defn tabs

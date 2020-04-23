@@ -6,7 +6,7 @@
             [kuhumcst.recap.lens :as lens]
             [kuhumcst.recap.layout.core :as layout]
             [kuhumcst.recap.layout.landmarks :as landmarks]
-            [kuhumcst.recap.tabs :refer [tabs]]))
+            [kuhumcst.recap.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -47,7 +47,10 @@
                  [:p lorem-ipsum-1]]]
    ["Fourth" [padded
               [:h1 "Even more lorem ipsum!!!"]
-              [:p lorem-ipsum-2]]]])
+              [:p lorem-ipsum-2]]]
+   ["Fifth" [padded
+             [:h1 "Even more lorem ipsum!!!"]
+             [:p lorem-ipsum-2]]]])
 
 (def tabs-small
   [["1" [padded "One"]]
@@ -56,7 +59,7 @@
    ["4" [padded "Four"]]])
 
 (defonce tabs-ratom
-  (r/atom {:kvs tabs-big
+  (r/atom {:kvs (tabs/heterostyled tabs-big)
            :i   0}))
 
 (defonce tabs-ratom-for-cursor

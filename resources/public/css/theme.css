@@ -3,6 +3,7 @@
     --background: #FFF;
     --border-radius: 3px;
     --color: #222;
+    --text-shadow: 0 0 2px #FFF;
     --font-size: 14px;
     --border-width: 1px;
     --border-color: #888;
@@ -10,15 +11,22 @@
     --padding: 8px;
     --margin: 8px;
     --transition: all 0.3s;
+    --filter: brightness(1);
 
-    /* Custom. */
+    /* Variations. */
     --font-size-s: 14px;
     --padding-s: 8px;
     --padding-l: 16px;
     --padding-xl: 32px;
-    --inactive-color: #AAA;
-    --inactive-background: #CCC;
-    --inactive-background-focus: #EEE;
+    --inactive-filter: brightness(0.8);
+    --inactive-filter-focus: brightness(0.95);
     --inactive-border: 1px solid #DDD;
     --heading-font-family: Futura, sans-serif;
+
+    /* Custom. */
+    --tab-background-1: #CC99C9;
+    --tab-background-2: #9EC1CF;
+    --tab-background-3: #9EE09E;
+    --tab-background-4: #FDFD97;
+    --tab-background-5: #FF9AA2;
 }
