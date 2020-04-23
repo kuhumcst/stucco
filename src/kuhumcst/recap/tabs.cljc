@@ -45,7 +45,8 @@
                                      "var(--tab-background-2)"
                                      "var(--tab-background-3)"
                                      "var(--tab-background-4)"
-                                     "var(--tab-background-5)"]))
+                                     "var(--tab-background-5)"
+                                     "var(--tab-background-6)"]))
         mk-style    (fn [m n]
                       (assoc m :style {:background (nth backgrounds n)}))]
     (into (empty kvs)

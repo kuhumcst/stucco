@@ -7,7 +7,6 @@
     transition: var(--transition);
     cursor: grab;
     color: var(--color);
-    text-shadow: var(--text-shadow);
     font-size: var(--font-size);
     font-family: var(--heading-font-family);
     padding: var(--padding) var(--padding-xl);

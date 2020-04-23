@@ -50,6 +50,9 @@
               [:p lorem-ipsum-2]]]
    ["Fifth" [padded
              [:h1 "Even more lorem ipsum!!!"]
+             [:p lorem-ipsum-2]]]
+   ["Sixth" [padded
+             [:h1 "Even more lorem ipsum!!!"]
              [:p lorem-ipsum-2]]]])
 
 (def tabs-small
