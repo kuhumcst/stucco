@@ -3,7 +3,6 @@
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]
-            [reagent.core :as r]
             [kuhumcst.recap.drag :as rd]))
 
 ;; TODO: incorrect for any combination of ns and symbol containing $
@@ -28,11 +27,8 @@
 ;; TODO: make accessible
 (defn code
   "Drop-zone for inspecting data as code. Accepts `state` as optional param."
-  [& [state]]
-  (let [state  (if state
-                 state
-                 (r/atom nil))
-        delete (fn []
+  [state]
+  (let [delete (fn []
                  (when-let [*state @state]
                    (reset! state nil)
                    *state))
