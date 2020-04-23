@@ -1,0 +1,24 @@
+:root {
+    /* Defaults. */
+    --background: #FFF;
+    --border-radius: 3px;
+    --color: #222;
+    --font-size: 14px;
+    --border-width: 1px;
+    --border-color: #888;
+    --border: 1px solid #888;
+    --padding: 8px;
+    --margin: 8px;
+    --transition: all 0.3s;
+
+    /* Custom. */
+    --font-size-s: 14px;
+    --padding-s: 8px;
+    --padding-l: 16px;
+    --padding-xl: 32px;
+    --inactive-color: #AAA;
+    --inactive-background: #CCC;
+    --inactive-background-focus: #EEE;
+    --inactive-border: 1px solid #DDD;
+    --heading-font-family: Futura, sans-serif;
+}

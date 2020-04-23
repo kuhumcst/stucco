@@ -4,33 +4,32 @@
 
 .tab-list .tab {
     white-space: nowrap;
-    transition: background-color 0.3s;
+    transition: var(--transition);
     cursor: grab;
-    color: #222;
-    font-size: 14px;
-    font-family: Futura, sans-serif;
-    text-align: center;
-    padding: 8px 40px;
-    margin: 0; /* Remove default button margin (for Safari). */
+    color: var(--color);
+    font-size: var(--font-size);
+    font-family: var(--heading-font-family);
+    padding: var(--padding) var(--padding-xl);
     display: inline-block;
-    background: #CCC;
+    background: var(--inactive-background);
     box-shadow:
         inset -8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
-    border: 1px solid #888;
+    border: var(--border);
     border-right: none;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
 .tab-list .tab-dropzone {
-    transition: border 0.3s;
+    transition: var(--transition);
     flex-grow: 1;
-    height: 36px;
-    border: 1px solid #DDD;
-    border-bottom: 1px solid #888;
+    height: 36px; /* TODO: calculate dynamically? */
+    background: var(--background);
+    border: var(--inactive-border);
+    border-bottom: var(--border);
     border-left: none;
-    border-top-right-radius: 4px;
+    border-top-right-radius:  var(--border-radius);
     box-shadow:
         inset 8px 0px 16px -8px rgba(0,0,0,0.1),
         inset -8px 0px 16px -8px rgba(0,0,0,0.1),
@@ -39,8 +38,8 @@
 
 /* An empty tab-list (= only a dropzone). */
 .tab-list .tab-dropzone:first-child {
-    border-top-left-radius: 4px;
-    border: 1px solid #DDD;
+    border-radius:  var(--border-radius);
+    border: var(--inactive-border);
 }
 
 .tab-list .tab[aria-selected="true"] ~ .tab {
@@ -50,16 +49,16 @@
 }
 
 .tab-list .tab:first-child {
-    border-top-left-radius: 4px;
+    border-top-left-radius:  var(--border-radius);
 }
 
 
 .tab-list .tab:nth-last-child(2) {
-    border-right: 1px solid #888;
+    border-right: var(--border);
 }
 
 .tab-list .tab:last-child {
-    border-top-right-radius: 4px;
+    border-top-right-radius: var(--border-radius);
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
@@ -69,26 +68,29 @@
 
 .tab-list .tab:hover,
 .tab-list .tab:focus {
-    background-color: #EEE;
+    background: var(--inactive-background-focus);
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
 }
 
 .tab-list .tab[aria-selected="true"] {
-    background: white;
-    border-bottom: none;
-    padding-bottom: 9px; /* Re-adding 1px from missing border. */
+    background: var(--background);
     box-shadow: none;
+
+    /* Extra padding making up for missing border. */
+    border-bottom: none;
+    padding-bottom: calc(var(--padding) + var(--border-width));
 }
 
 .tab-panel {
-    border: 1px solid #888;
-    border-radius: 4px;
+    background: var(--background);
+    border: var(--border);
+    border-radius:  var(--border-radius);
 }
 
 /* The visual merging of tab-list and tab-panel is only based on placement. */
 .tab-list + .tab-panel {
     border-top: none;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }

@@ -1,25 +1,24 @@
 .code-lens {
     display: block;
     overflow: auto;
-    background: white;
-    border: 1px solid #888;
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 14px;
-    min-height: 1em;
+    background: var(--background);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    font-size: var(--font-size);
 }
 
 .code-lens--empty {
     display: inline-block;
-    color: #AAA;
+    color: var(--inactive-color);
 }
 
 .code-lens__meta {
-    color: darkblue;
-    background: #EEEEFF;
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    color: darkblue; /* TODO: theme it? */
+    background: #EEEEFF; /* TODO: theme it? */
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-s);
     font-style: italic;
-    margin-bottom: 8px;
+    margin-bottom: var(--margin);
 }
