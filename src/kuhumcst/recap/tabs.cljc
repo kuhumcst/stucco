@@ -14,6 +14,7 @@
             [kuhumcst.recap.state :as state]
             [kuhumcst.recap.util :as util]))
 
+;; TODO: find some way to remove dropzone when full width of tabs
 ;; TODO: fix - selecting a tab resets focus to an earlier tab in the list
 ;;       actually, this is OK, but tabs should be selected using arrow keys
 ;;       FIX: a focus listener stores focus as a stack. Universally restore

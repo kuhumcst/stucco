@@ -4,6 +4,8 @@
 
 .tab {
     white-space: nowrap;
+    overflow: hidden; /* Also fixes internal drop area when dragging. */
+    text-overflow: ellipsis;
     transition: var(--transition);
     cursor: grab;
     color: var(--color);
