@@ -31,9 +31,8 @@
   feugiat in, orci. In hac habitasse platea dictumst.")
 
 (defn padded
-  [element]
-  [:div {:style {:padding 10}}
-   element])
+  [& elements]
+  (into [:div {:style {:padding 10}}] elements))
 
 (def tabs-big
   [["Lorem ipsum" [padded
