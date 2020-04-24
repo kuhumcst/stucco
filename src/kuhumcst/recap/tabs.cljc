@@ -74,23 +74,24 @@
     [:div.tab-list {:id   tab-list-id
                     :role "tab-list"}
      (for [n (range length)
-           :let [kv     (vary-meta (nth kvs n) assoc
-                                   :tab-list-id tab-list-id
-                                   :selected? (= n i))
-                 id     (mk-tab-id tab-list-id n)
-                 delete (fn []
-                          (swap! state mk-drag-state n)
-                          kv)
-                 insert (fn [kv]
-                          (swap! state mk-drop-state n kv))
-                 select (fn []
-                          (swap! state assoc :i n))]]
+           :let [kv        (nth kvs n)
+                 selected? (= n i)
+                 id        (mk-tab-id tab-list-id n)
+                 delete    (fn []
+                             (swap! state mk-drag-state n)
+                             (vary-meta kv assoc
+                                        :tab-list-id tab-list-id
+                                        :selected? selected?))
+                 insert    (fn [kv]
+                             (swap! state mk-drop-state n kv))
+                 select    (fn []
+                             (swap! state assoc :i n))]]
        ;; Would prefer using button, but FF excludes its padding from drag area.
        [:span.tab (merge (util/tab-attr select)
                          {:key           (hash [kvs i n])
                           :id            id
                           :style         (:style (meta kv))
-                          :aria-selected (:selected? (meta kv))
+                          :aria-selected selected?
                           :draggable     true
                           :on-drag-start (rd/on-drag-start delete)
                           :on-drag-end   (rd/on-drag-end)

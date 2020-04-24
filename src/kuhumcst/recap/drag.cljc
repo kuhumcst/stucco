@@ -37,21 +37,20 @@
     (let [drag-id  (str (hash drag-fn))
           dt       (.-dataTransfer e)
           element  (.-target e)
-          ghost    (doto (.cloneNode element true)
-                     (add-modifier! "ghost")
-                     (.setAttribute "aria-hidden" "true")
-                     (js/document.body.appendChild))
-          x-offset (/ (.-offsetWidth ghost) 2)
-          y-offset (/ (.-offsetHeight ghost) 2)]
+          x-offset (/ (.-offsetWidth element) 2)
+          y-offset (/ (.-offsetHeight element) 2)
+          ghost    (.cloneNode element true)]
       (swap! drag-fns assoc drag-id {:drag-fn drag-fn
                                      :ghost   ghost})
       ;; The ghost is so we can differentiate source and the drag image styling.
+      (.add (.-classList ghost) "--ghost")
+      (.setAttribute ghost "aria-hidden" "true")
       (js/document.body.appendChild ghost)
       (.setDragImage dt ghost x-offset y-offset)
       (set! (.-effectAllowed dt) "move")
       (set! (.-dropEffect dt) "move")
       (.setData dt "fn" drag-id)
-      ;; Modifying dragged element after the onDragStart event will glitch both
+      ;; Modifying a dragged element after an onDragStart event will glitch both
       ;; Chrome and Safari, making this slight delay necessary. Firefox is OK.
       (js/setTimeout #(add-modifier! element "drag") 20))))
 

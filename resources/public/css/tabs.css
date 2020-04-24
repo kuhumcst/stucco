@@ -39,12 +39,6 @@
     border-right: none;
 }
 
-/* Hack to provide a drag image while discounting changes to original. */
-.tab--ghost {
-    position: absolute;
-    top: -99999px;
-}
-
 .tab-dropzone {
     transition: var(--transition);
     flex-grow: 1;

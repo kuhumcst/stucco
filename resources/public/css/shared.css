@@ -1,0 +1,6 @@
+/* Hack to provide a drag image while discounting changes to original. */
+.--ghost {
+    animation: none;
+    position: absolute;
+    top: -99999px;
+}
