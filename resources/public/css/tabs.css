@@ -26,11 +26,19 @@
     transition: var(--transition);
     flex-grow: 1;
     height: 36px; /* TODO: calculate dynamically? */
-    background: var(--background);
-    border: var(--inactive-border);
+
+    border: var(--transparent-border);
     border-bottom: var(--border);
     border-left: none;
     border-top-right-radius:  var(--border-radius);
+}
+
+/* --drag-over is used as a pattern. */
+.tab-list .tab-dropzone--drag-over,
+.tab-list .tab-dropzone:first-child {
+    background: var(--background);
+    border: var(--inactive-border);
+    border-bottom: var(--border);
     box-shadow:
         inset 8px 0px 16px -8px rgba(0,0,0,0.1),
         inset -8px 0px 16px -8px rgba(0,0,0,0.1),

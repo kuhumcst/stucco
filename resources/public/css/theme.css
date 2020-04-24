@@ -20,6 +20,7 @@
     --inactive-filter: brightness(0.8);
     --inactive-filter-focus: brightness(0.95);
     --inactive-border: 1px solid #DDD;
+    --transparent-border: 1px solid transparent;
     --heading-font-family: Futura, sans-serif;
 
     /* Custom. */

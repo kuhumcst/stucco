@@ -93,11 +93,15 @@
                           :aria-selected (:selected? (meta kv))
                           :draggable     true
                           :on-drag-start (rd/on-drag-start delete)
+                          :on-drag-enter (rd/on-drag-enter)
                           :on-drag-over  (rd/on-drag-over)
+                          :on-drag-leave (rd/on-drag-leave)
                           :on-drop       (rd/on-drop insert)})
         (first kv)])
-     [:span.tab-dropzone {:on-drag-over (rd/on-drag-over)
-                          :on-drop      (rd/on-drop append)}]]))
+     [:span.tab-dropzone {:on-drag-enter (rd/on-drag-enter)
+                          :on-drag-over  (rd/on-drag-over)
+                          :on-drag-leave (rd/on-drag-leave)
+                          :on-drop       (rd/on-drop append)}]]))
 
 (defn tab-panel
   "The currently selected tab-panel of the `state`."
