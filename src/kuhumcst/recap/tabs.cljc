@@ -16,6 +16,11 @@
 
 ;; TODO: fix - selecting a tab resets focus to an earlier tab in the list
 ;;       actually, this is OK, but tabs should be selected using arrow keys
+;;       FIX: a focus listener stores focus as a stack. Universally restore
+;;       previous focus when focus is lost from a component and the component is
+;;       no longer in the DOM? Will restore to either first element available in
+;;       stack, either based on DOM object or ID (in case the object has been
+;;       swapped out).
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
