@@ -35,9 +35,13 @@
     color: transparent;
 }
 
+/* Shouldn't transition when put at the end of tab-list. */
+.tab:nth-last-child(2) {
+    transition: all 0s;
+}
+
 /* Looks much better and fixes issue with transparent border... somehow! */
 .tab:nth-last-child(2).tab--drag {
-    transition: all 0s;
     border-right: none;
 }
 
