@@ -93,6 +93,7 @@
                           :aria-selected (:selected? (meta kv))
                           :draggable     true
                           :on-drag-start (rd/on-drag-start delete)
+                          :on-drag-end   (rd/on-drag-end)
                           :on-drag-enter (rd/on-drag-enter)
                           :on-drag-over  (rd/on-drag-over)
                           :on-drag-leave (rd/on-drag-leave)

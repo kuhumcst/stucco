@@ -2,7 +2,7 @@
     display: flex;
 }
 
-.tab-list .tab {
+.tab {
     white-space: nowrap;
     transition: var(--transition);
     cursor: grab;
@@ -22,20 +22,42 @@
     letter-spacing: 2px;
 }
 
-.tab-list .tab-dropzone {
+.tab--drag {
+    transition:
+        var(--transition),
+        color 0s; /* Just looks better. */
+    border-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    width: 0;
+    color: transparent;
+}
+
+/* Looks much better and fixes issue with transparent border... somehow! */
+.tab:nth-last-child(2).tab--drag {
+    transition: all 0s;
+    border-right: none;
+}
+
+/* Hack to provide a drag image while discounting changes to original. */
+.tab--ghost {
+    position: absolute;
+    top: -99999px;
+}
+
+.tab-dropzone {
     transition: var(--transition);
     flex-grow: 1;
     height: 36px; /* TODO: calculate dynamically? */
 
     border: var(--transparent-border);
     border-bottom: var(--border);
-    border-left: none;
+    border-left-width: 0;
     border-top-right-radius:  var(--border-radius);
 }
 
 /* --drag-over is used as a pattern. */
-.tab-list .tab-dropzone--drag-over,
-.tab-list .tab-dropzone:first-child {
+.tab-dropzone--drag-over {
     background: var(--background);
     border: var(--inactive-border);
     border-bottom: var(--border);
@@ -46,44 +68,61 @@
 }
 
 /* An empty tab-list (= only a dropzone). */
-.tab-list .tab-dropzone:first-child {
-    border-radius:  var(--border-radius);
+.tab-dropzone:first-child {
+    background: var(--background);
+    border-radius: var(--border-radius);
     border: var(--inactive-border);
 }
 
-.tab-list .tab[aria-selected="true"] ~ .tab {
+.tab.tab--drag + .tab-dropzone {
+    transition: var(--transition), border-left 0s;
+    border-left: var(--border);
+}
+
+.tab:first-child.tab--drag + .tab-dropzone {
+    transition: var(--transition);
+    border-left-color: transparent;
+}
+
+.tab:first-child.tab--drag + .tab-dropzone.tab-dropzone--drag-over {
+    transition: var(--transition);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border: var(--inactive-border);
+    border-bottom: var(--border);
+}
+
+.tab[aria-selected="true"] ~ .tab {
     box-shadow:
         inset 8px 0px 8px -8px rgba(0,0,0,0.4),
         inset 0px -8px 8px -8px rgba(0,0,0,0.2);
 }
 
-.tab-list .tab:first-child {
-    border-top-left-radius:  var(--border-radius);
+.tab:first-child {
+    border-top-left-radius: var(--border-radius);
 }
 
-
-.tab-list .tab:nth-last-child(2) {
+.tab:nth-last-child(2) {
     border-right: var(--border);
 }
 
-.tab-list .tab:last-child {
+.tab:last-child {
     border-top-right-radius: var(--border-radius);
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
-.tab-list .tab:active {
+.tab:active {
     outline: none;
 }
 
-.tab-list .tab:hover,
-.tab-list .tab:focus {
+.tab:hover,
+.tab:focus {
     filter: var(--inactive-filter-focus);
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
 }
 
-.tab-list .tab[aria-selected="true"] {
+.tab[aria-selected="true"] {
     background: var(--background);
     filter: var(--filter);
     box-shadow: none;

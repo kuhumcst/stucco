@@ -9,7 +9,7 @@
   #"(\w-?)+")
 
 ;; Assumes BEM convention is respected, i.e. only a single block class applied.
-(defn- add-modifier
+(defn- add-modifier!
   [element modifier]
   (let [class-list (.-classList element)
         class      (str (->> (array-seq class-list)
@@ -18,7 +18,7 @@
                         "--" modifier)]
     (.add class-list class)))
 
-(defn- remove-modifier
+(defn- remove-modifier!
   [element modifier]
   (let [class-list (.-classList element)
         class      (->> (array-seq class-list)
@@ -34,11 +34,31 @@
   "The `drag-fn` is called with no args on a successful drop."
   [drag-fn]
   (fn [e]
-    (let [drag-id (str (hash drag-fn))]
-      (swap! drag-fns assoc drag-id drag-fn)
-      (set! e.dataTransfer.effectAllowed "move")
-      (set! (.-dropEffect (.-dataTransfer e)) "move")
-      (.setData (.-dataTransfer e) "fn" drag-id))))
+    (let [drag-id  (str (hash drag-fn))
+          dt       (.-dataTransfer e)
+          element  (.-target e)
+          ghost    (doto (.cloneNode element true)
+                     (add-modifier! "ghost")
+                     (.setAttribute "aria-hidden" "true")
+                     (js/document.body.appendChild))
+          x-offset (/ (.-offsetWidth ghost) 2)
+          y-offset (/ (.-offsetHeight ghost) 2)]
+      (swap! drag-fns assoc drag-id {:drag-fn drag-fn
+                                     :ghost   ghost})
+      ;; The ghost is so we can differentiate source and the drag image styling.
+      (js/document.body.appendChild ghost)
+      (.setDragImage dt ghost x-offset y-offset)
+      (set! (.-effectAllowed dt) "move")
+      (set! (.-dropEffect dt) "move")
+      (.setData dt "fn" drag-id)
+      ;; Modifying dragged element after the onDragStart event will glitch both
+      ;; Chrome and Safari, making this slight delay necessary. Firefox is OK.
+      (js/setTimeout #(add-modifier! element "drag") 20))))
+
+(defn on-drag-end
+  []
+  (fn [e]
+    (remove-modifier! (.-target e) "drag")))
 
 ;; The onDragOver handler is needed for drag-and-drop to work.
 (defn on-drag-over
@@ -51,13 +71,13 @@
   []
   (fn [e]
     (.preventDefault e)
-    (add-modifier (.-target e) "drag-over")))
+    (add-modifier! (.-target e) "drag-over")))
 
 (defn on-drag-leave
   []
   (fn [e]
     (.preventDefault e)
-    (remove-modifier (.-target e) "drag-over")))
+    (remove-modifier! (.-target e) "drag-over")))
 
 (defn on-drop
   "The `drop-fn` is called with the drag-fn's output as its input on a
@@ -65,9 +85,10 @@
   [drop-fn]
   (fn [e]
     (.preventDefault e)
-    (remove-modifier (.-target e) "drag-over")
+    (remove-modifier! (.-target e) "drag-over")
     (let [drag-id (.getData (.-dataTransfer e) "fn")
-          drag-fn (get @drag-fns drag-id)]
+          {:keys [drag-fn ghost]} (get @drag-fns drag-id)]
       (when drag-fn
         (swap! drag-fns dissoc drag-id)
-        (drop-fn (drag-fn))))))
+        (drop-fn (drag-fn))
+        (.removeChild (.-parentNode ghost) ghost)))))
