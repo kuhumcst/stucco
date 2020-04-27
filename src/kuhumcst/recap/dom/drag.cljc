@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.drag
+(ns kuhumcst.recap.dom.drag
   "A functional take on drag-and-drop.
 
   All successful drops execute the code `(drop-fn (drag-fn))` in order

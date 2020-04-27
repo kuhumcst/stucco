@@ -86,15 +86,15 @@ Workflow
 Development of the project is done using the live-reloading capabilities of shadow-cljs:
 
 ```
-shadow-cljs watch dev
+shadow-cljs watch app
 ```
 
-This will start a basic web server at `localhost:7000` serving the `:dev` build as specified in the `shadow-cljs.edn` file.
+This will start a basic web server at `localhost:7000` serving the `:app` build as specified in the `shadow-cljs.edn` file.
 
 It's possible to execute unit tests while developing by also specifying the `:test` build:
 
 ```
-shadow-cljs watch dev test
+shadow-cljs watch app test
 ```
 
 This will make test output available at `localhost:7100`. It's quite convenient to keep a separate browser tab open just for this. The favicon will be coloured green or red depending on the state of the assertions.
@@ -102,7 +102,7 @@ This will make test output available at `localhost:7100`. It's quite convenient 
 Personally, I use the Clojure CLI integration in Cursive to calculate a classpath and download dependencies. Something like this command is being executed behind the scenes:
 
 ```
-clj -A:dev:test -Spath
+clj -A:app:test -Spath
 ```
 
 I have also set up some aliases in my personal [~/.clojure/deps.edn](https://github.com/simongray/dotfiles/blob/master/dot/clojure/deps.edn) file to perform certain common tasks such as listing/updating outdated packages:

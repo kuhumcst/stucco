@@ -1,9 +1,9 @@
-(ns kuhumcst.recap.lens
+(ns kuhumcst.recap.widgets.lens
   "Reagent components for inspecting generic data."
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]
-            [kuhumcst.recap.drag :as rd]))
+            [kuhumcst.recap.dom.drag :as drag]))
 
 ;; TODO: incorrect for any combination of ns and symbol containing $
 (defn- f->symbol
@@ -36,12 +36,12 @@
 
     (fn []
       (let [*state @state]
-        [:pre {:on-drag-over (rd/on-drag-over)
-               :on-drop      (rd/on-drop insert)}
+        [:pre {:on-drag-over (drag/on-drag-over)
+               :on-drop      (drag/on-drop insert)}
          (if (empty? *state)
            [:code.code-lens.code-lens--empty "( )"]
            [:code.code-lens {:draggable     true
-                             :on-drag-start (rd/on-drag-start delete)}
+                             :on-drag-start (drag/on-drag-start delete)}
             (when-let [metadata (meta *state)]
               [:div.code-lens__meta {:title "Metadata"}
                "^" (with-out-str (pprint (coll->code metadata)))])

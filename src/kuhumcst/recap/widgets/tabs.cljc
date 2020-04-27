@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.tabs
+(ns kuhumcst.recap.widgets.tabs
   "Reagent components for creating a tabbed UI.
 
   Shared state for tab components:
@@ -10,18 +10,13 @@
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
-  (:require [kuhumcst.recap.drag :as rd]
+  (:require [kuhumcst.recap.dom.core :as dom]
+            [kuhumcst.recap.dom.drag :as drag]
+            [kuhumcst.recap.dom.keyboard :as kbd]
             [kuhumcst.recap.state :as state]
             [kuhumcst.recap.util :as util]))
 
 ;; TODO: find some way to remove dropzone when full width of tabs
-;; TODO: fix - selecting a tab resets focus to an earlier tab in the list
-;;       actually, this is OK, but tabs should be selected using arrow keys
-;;       FIX: a focus listener stores focus as a stack. Universally restore
-;;       previous focus when focus is lost from a component and the component is
-;;       no longer in the DOM? Will restore to either first element available in
-;;       stack, either based on DOM object or ID (in case the object has been
-;;       swapped out).
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
@@ -72,8 +67,9 @@
                  (if (= tab-list-id (:tab-list-id (meta kv)))
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
-    [:div.tab-list {:id   tab-list-id
-                    :role "tab-list"}
+    [:div.tab-list {:id          tab-list-id
+                    :role        "tab-list"
+                    :on-key-down (kbd/select-fn state)}
      (for [n (range length)
            :let [kv        (nth kvs n)
                  selected? (= n i)
@@ -88,23 +84,26 @@
                  select    (fn []
                              (swap! state assoc :i n))]]
        ;; Would prefer using button, but FF excludes its padding from drag area.
-       [:span.tab (merge (util/tab-attr select)
-                         {:key           (hash [kvs i n])
-                          :id            id
-                          :style         (:style (meta kv))
-                          :aria-selected selected?
-                          :draggable     true
-                          :on-drag-start (rd/on-drag-start delete)
-                          :on-drag-end   (rd/on-drag-end)
-                          :on-drag-enter (rd/on-drag-enter)
-                          :on-drag-over  (rd/on-drag-over)
-                          :on-drag-leave (rd/on-drag-leave)
-                          :on-drop       (rd/on-drop insert)})
+       [:span.tab {:key           (hash [kvs i n])
+                   :id            id
+                   :ref           dom/accept-focus!
+                   :style         (:style (meta kv))
+                   :aria-selected selected?
+                   :tab-index     (if selected? "0" "-1")
+                   :auto-focus    selected?
+                   :on-click      select
+                   :draggable     true
+                   :on-drag-start (drag/on-drag-start delete)
+                   :on-drag-end   (drag/on-drag-end)
+                   :on-drag-enter (drag/on-drag-enter)
+                   :on-drag-over  (drag/on-drag-over)
+                   :on-drag-leave (drag/on-drag-leave)
+                   :on-drop       (drag/on-drop insert)}
         (first kv)])
-     [:span.tab-dropzone {:on-drag-enter (rd/on-drag-enter)
-                          :on-drag-over  (rd/on-drag-over)
-                          :on-drag-leave (rd/on-drag-leave)
-                          :on-drop       (rd/on-drop append)}]]))
+     [:span.tab-dropzone {:on-drag-enter (drag/on-drag-enter)
+                          :on-drag-over  (drag/on-drag-over)
+                          :on-drag-leave (drag/on-drag-leave)
+                          :on-drop       (drag/on-drop append)}]]))
 
 (defn tab-panel
   "The currently selected tab-panel of the `state`."

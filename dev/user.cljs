@@ -3,10 +3,10 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [kuhumcst.recap.lens :as lens]
             [kuhumcst.recap.layout.core :as layout]
             [kuhumcst.recap.layout.landmarks :as landmarks]
-            [kuhumcst.recap.tabs :refer [tabs] :as tabs]))
+            [kuhumcst.recap.widgets.lens :as lens]
+            [kuhumcst.recap.widgets.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
