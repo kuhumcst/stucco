@@ -10,7 +10,7 @@
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
-  (:require [kuhumcst.recap.dom.core :as dom]
+  (:require [kuhumcst.recap.dom.focus :as focus]
             [kuhumcst.recap.dom.drag :as drag]
             [kuhumcst.recap.dom.keyboard :as kbd]
             [kuhumcst.recap.state :as state]
@@ -87,7 +87,7 @@
        [:span.tab {:role          "tab"
                    :key           (hash [kvs i n])
                    :id            id
-                   :ref           dom/accept-focus!
+                   :ref           focus/accept!
                    :style         (:style (meta kv))
                    :aria-selected selected?
                    :tab-index     (if selected? "0" "-1")
@@ -119,7 +119,7 @@
        v])))
 
 (defn tabs
-  "A merged view of the tab-list and the tab-panel of the currently selected tab.
+  "Merged view of the tab-list and the tab-panel of the currently selected tab.
   Takes `state` of the form described in the docstring of this namespace."
   [state {:keys [tab-list-id] :as opts}]
   [:article.tabs

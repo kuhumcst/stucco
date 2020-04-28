@@ -4,7 +4,7 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#keyboard"
   (:require [clojure.set :as set]
-            [kuhumcst.recap.dom.core :as dom]
+            [kuhumcst.recap.dom.focus :as focus]
             [kuhumcst.recap.dom.key :as key]))
 
 ;; https://javascript.info/bubbling-and-capturing
@@ -60,7 +60,7 @@
                      ;; Focus is both set directly and requested asynchronously.
                      ;; Which method is effective is determined by whether the
                      ;; element has to be re-rendered (async) or not (direct).
-                     (dom/request-focus! e.target.id)
+                     (focus/request! e.target.id)
                      (.click e.target)
                      (.focus e.target))
         prev-item (.focus (last (if (empty? before)
