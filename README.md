@@ -4,7 +4,7 @@ The `recap`<sup>†</sup> project is an ongoing effort to create a collection of
 
 This library is my take on how to build [reagent](https://github.com/reagent-project/reagent) components that are simpler to reason about, less mechanical to connect, and more declarative overall. It is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [tei-facsimile](https://github.com/kuhumcst/tei-facsimile) viewer.
 
-_<sup>†</sup> Or more correctly, **ReCAP**, as it is an abbreviation of "**Re**usable **C**omponents for **A**cademic **P**rojects"._
+> _<sup>†</sup> Or more correctly, **ReCAP**, as it is an abbreviation of "**Re**agent **C**omponents for **A**cademic **P**rojects"._
 
 Adaptive user interfaces
 ------------------------
@@ -18,13 +18,18 @@ Anticipating both the current and future needs of academic end users, UIs built 
 
 Accessibility semantics
 -----------------------
-Full accessibility is _really_ hard to get right in web applications. The aim of this library is to have any UI built with it be broadly accessible. To this effect, the components mostly follow the [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/). Only the contextual parts that _cannot_ be automatically deduced are made the responsibility of the developer. Runtime assertions serve as an enforcement mechanism during development.
+Full accessibility is _really_ hard to get right in web applications. The aim of this library is to have any UI built with it be broadly accessible. To this effect, the components mostly follow the [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/):
+
+* Semantic HTML is used throughout (when possible) and appropriate ARIA attributes are set whenever they're required.
+* Every component can be operated in a predictable way when using a keyboard instead of a mouse (also to the benefit of keyboard power users).
+* ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis of layouts in `recap`, making the process entirely declarative whilst coercing an accessible HTML structure. Focusing purely on semantics also allows the developer (or the end user) to hot swap the basic layout.
+* The component names try to match the official W3C terminology as much as possible, e.g. the `tabs` component consists of a `tab-list` and the currently selected `tab-panel`. The deliberate use of well-established names also aids developers using this library.
+
+For these reasons, accessibility should not just be seen as an obstacle, but as a set of semantic constraints that work in synergy with the goal of creating an adaptive UI.
 
 All the components in the library should - in principle - comply with the [EU Web Accessibility Directive](https://en.wikipedia.org/wiki/Web_Accessibility_Directive) and the relevant [Danish law](https://www.retsinformation.dk/Forms/r0710.aspx?id=201794). In practice, this means compliance with [WCAG 2.1](https://www.w3.org/TR/WCAG21/) which is the current guideline from the World Wide Web Consortium.
 
-The components also try to match the official W3C terminology as much as possible, e.g. the `tabs` component consists of a `tab-list` and the currently selected `tab-panel`. The deliberate use of well-established names for components is also a service towards the developers that may be using this library.
-
-Moreover, ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis of layouts in `recap`, making the process entirely declarative whilst coercing an accessible HTML structure. Focusing purely on semantics also allows the developer (or the end user) to hot swap the basic layout. For this reason, accessibility should not just be seen as an obstacle, but as a set of semantic constraints that work in synergy with the goal of creating an adaptive UI. 
+Only the contextual parts that _cannot_ be automatically deduced are made the responsibility of the developer. Runtime assertions serve as a helpful enforcement mechanism during development.
 
 Connecting through shared state
 -------------------------------
@@ -43,7 +48,7 @@ I was motivated by the following considerations:
 
 The Python principle of ["we are all consenting adults here"](https://mail.python.org/pipermail/tutor/2003-October/025932.html) is relevant here. This idea is also widely practiced in the Clojure/ClojureScript world, just not when it comes to stateful reagent components.
 
-_<sup>†</sup> Of course, many "dumb" components are actually completely stateless. These are not the main concern of `recap`._
+> _<sup>†</sup> Of course, many "dumb" components are actually completely stateless. These are not the main concern of `recap`._
 
 ### Trade-offs
 * The user is no longer required to write call back functions, but code that relies on side-effects of callback functions is now more complicated to write (e.g. maybe you need a wrapper or a watch function).
