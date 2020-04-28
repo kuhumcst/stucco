@@ -10,33 +10,63 @@
 ;; https://javascript.info/bubbling-and-capturing
 ;; https://www.mutuallyhuman.com/blog/keydown-is-the-only-keyboard-event-we-need/
 
-(defn select-fn
-  "Intra-component selection handler that follows WAI-ARIA Authoring Practices.
-  Should be used by any component with multiple focusable parts, e.g. tab-list.
+(defn- role-siblings
+  "Get siblings for an `element` (including itself) with the same ARIA role."
+  [element]
+  (let [role (.getAttribute element "role")]
+    (->> (.-children (.-parentNode element))
+         (filter #(= role (.getAttribute % "role"))))))
 
-  Will mutate the :i of the `state`. The selection order is determined by the
-  order of the DOM siblings.
+(defn- adjacent-role-siblings
+  "Get adjacent role siblings for an `element` as [before after]."
+  [element]
+  (loop [before []
+         after  nil
+         [sibling & siblings] (role-siblings element)]
+    (cond
+      (nil? sibling) [before after]
+      (= element sibling) (recur before [] siblings)
+      after (recur before (conj after sibling) siblings)
+      before (recur (conj before sibling) after siblings))))
 
-  ARIA reference:
+(def prev-item
+  (set/union key/up key/left))
+
+(def next-item
+  (set/union key/down key/right))
+
+(def click-item
+  (set/union key/spacebar key/enter))
+
+(def supported-keys
+  (set/union prev-item next-item click-item))
+
+(defn roving-tabindex-handler
+  "OnKeyDown handler with keyboard functionality needed for a roving tabindex.
+  Focus moves between adjacent DOM siblings with the same ARIA role.
+
+  Requires :on-click and :role to have been set on the affected elements.
+  The elements should also update their :tabindex attribute reactively.
+
+  ARIA references:
     https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_general_within"
-  [state]
-  (let [prev   (set/union key/up key/left)
-        next   (set/union key/down key/right)
-        select (set/union key/spacebar key/enter)]
-    (fn [e]
-      (when (contains? (set/union prev next select) e.key)
-        (.preventDefault e)
-        (.stopPropagation e)
-        (condp contains? e.key
-          select (do
-                   ;; Focus is both set directly and requested asynchronously.
-                   ;; Which method is effective is determined by whether the
-                   ;; element has to be re-rendered (async) or not (direct).
-                   (dom/request-focus! e.target.id)
-                   (.click e.target)
-                   (.focus e.target))
-          prev (when e.target.previousElementSibling
-                 (.focus e.target.previousElementSibling))
-          next (when e.target.nextElementSibling
-                 (.focus e.target.nextElementSibling))
-          :no-op)))))
+  [e]
+  (when (supported-keys e.key)
+    (.preventDefault e)
+    (.stopPropagation e)
+    (let [[before after] (adjacent-role-siblings e.target)]
+      (condp contains? e.key
+        click-item (do
+                     ;; Focus is both set directly and requested asynchronously.
+                     ;; Which method is effective is determined by whether the
+                     ;; element has to be re-rendered (async) or not (direct).
+                     (dom/request-focus! e.target.id)
+                     (.click e.target)
+                     (.focus e.target))
+        prev-item (.focus (last (if (empty? before)
+                                  after
+                                  before)))
+        next-item (.focus (first (if (empty? after)
+                                   before
+                                   after)))
+        :no-op))))

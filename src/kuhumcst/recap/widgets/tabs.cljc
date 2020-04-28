@@ -67,9 +67,9 @@
                  (if (= tab-list-id (:tab-list-id (meta kv)))
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
-    [:div.tab-list {:id          tab-list-id
-                    :role        "tab-list"
-                    :on-key-down (kbd/select-fn state)}
+    [:div.tab-list {:role        "tab-list"
+                    :id          tab-list-id
+                    :on-key-down kbd/roving-tabindex-handler}
      (for [n (range length)
            :let [kv        (nth kvs n)
                  selected? (= n i)
@@ -84,7 +84,8 @@
                  select    (fn []
                              (swap! state assoc :i n))]]
        ;; Would prefer using button, but FF excludes its padding from drag area.
-       [:span.tab {:key           (hash [kvs i n])
+       [:span.tab {:role          "tab"
+                   :key           (hash [kvs i n])
                    :id            id
                    :ref           dom/accept-focus!
                    :style         (:style (meta kv))
