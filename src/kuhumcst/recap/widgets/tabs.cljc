@@ -17,6 +17,7 @@
             [kuhumcst.recap.util :as util]))
 
 ;; TODO: find some way to remove dropzone when full width of tabs
+;; TODO: complete a11y
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
@@ -67,7 +68,7 @@
                  (if (= tab-list-id (:tab-list-id (meta kv)))
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
-    [:div.tab-list {:role        "tab-list"
+    [:div.tab-list {:role        "tablist"
                     :id          tab-list-id
                     :on-key-down kbd/roving-tabindex-handler}
      (for [n (range length)
@@ -114,7 +115,8 @@
         [_ v :as kv] (when (not-empty kvs)
                        (nth kvs i))]
     (when v
-      [:section.tab-panel {:aria-labelledby (mk-tab-id tab-list-id i)
+      [:section.tab-panel {:role            "tabpanel"
+                           :aria-labelledby (mk-tab-id tab-list-id i)
                            :style           (:style (meta kv))}
        v])))
 

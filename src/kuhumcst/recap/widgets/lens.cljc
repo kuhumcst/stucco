@@ -22,6 +22,7 @@
                      x))
                  coll))
 
+;; TODO: experiment - can this be an editable text field?
 ;; TODO: make appendable state, 2-column table view
 ;; TODO: make default operation copy rather than move
 ;; TODO: make accessible

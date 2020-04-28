@@ -6,13 +6,14 @@
 
 ;; Some landmarks only allow single instances, e.g. banner or main.
 (defn- assert-single-element
-  "Assert from hiccup `data` that the `landmark-type` is a single instance."
-  [landmark-type [tag & _ :as data]]
+  "Assert from the `hiccup` that the `landmark-type` is a single instance."
+  [landmark-type [tag & _ :as hiccup]]
   (assert (or (and (keyword? tag)
                    (not= :<> tag))
               (fn? tag))
-          (str landmark-type " is not a single element: " data)))
+          (str landmark-type " is not a single element: " hiccup)))
 
+;; TODO: optional skip-link? -- https://www.youtube.com/watch?v=cOmehxAU_4s
 (defn root
   "Root layout comprised of the top-level `landmarks`."
   [{:keys [banner

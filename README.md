@@ -14,25 +14,31 @@ End users of academic software typically have very specialised workflows, so it 
 * It must be maintained for much longer than most other software.
 * There is often little incentive/budget to further develop the software past the point of delivery.
 
-Anticipating both the current and future needs of academic end users, UIs built with `recap` get a high degree of customisability for "free". Most of the components can be reordered or otherwise customised by the end user to fit their individual workflow. Knowing that fashion is fleeting, the designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style.
+Anticipating the varied needs of both current and future end users, UIs built with `recap` aim for a high degree of adaptability:
+
+1. **Components should be tangible:** Most of the components can be reordered, resized, or otherwise customised by the end user to fit their individual workflow.
+2. **Components should be contextual:** Many components will visually connect with nearby elements by morphing their styling accordingly.
+3. **Devices are different:** The components are responsive and will adapt to different screen sizes. Alternative input methods like keyboard and touch gestures are also supported.
+
+Knowing that fashion is fleeting, the default designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style.
 
 Accessibility semantics
 -----------------------
 Full accessibility is _really_ hard to get right in web applications. The aim of this library is to have any UI built with it be broadly accessible. To this effect, the components mostly follow the [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/):
 
-* Semantic HTML is used throughout (when possible) and appropriate ARIA attributes are set whenever they're required.
-* Every component can be operated in a predictable way when using a keyboard instead of a mouse (also to the benefit of keyboard power users).
-* ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis of layouts in `recap`, making the process entirely declarative whilst coercing an accessible HTML structure. Focusing purely on semantics also allows the developer (or the end user) to hot swap the basic layout.
-* The component names try to match the official W3C terminology as much as possible, e.g. the `tabs` component consists of a `tab-list` and the currently selected `tab-panel`. The deliberate use of well-established names also aids developers using this library.
+1. **Markup should be semantic:** Semantic HTML is used throughout (when possible) and appropriate ARIA attributes are set whenever they're required.
+2. **Keyboard input must be equal** Every component can be operated in a predictable way when using a keyboard instead of a mouse (also to the benefit of keyboard power users).
+3. **Layout should be declarative:** ARIA [Landmark Regions](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark) are used as the basis of layouts in `recap`, making the process entirely declarative whilst coercing an accessible HTML structure.
+    - This allows for precise control of the tab order by ensuring that the DOM order corresponds to the visual layout presented to the end user.
+    - Focusing purely on semantics also allows the developer (or the end user) to hot swap the basic layout for a different one.
+4. **Terminology should be clear:** The component names try to match the official W3C terminology as much as possible, e.g. the `tabs` component consists of a `tab-list` and the currently selected `tab-panel`. The deliberate use of well-established names aids developers using this library.
 
-For these reasons, accessibility should not just be seen as an obstacle, but as a set of semantic constraints that work in synergy with the goal of creating an adaptive UI.
+For these reasons, accessibility should not be seen as an obstacle to overcome, but rather as a set of semantic constraints that work in synergy with the goal of creating an adaptive UI.
 
-All the components in the library should - in principle - comply with the [EU Web Accessibility Directive](https://en.wikipedia.org/wiki/Web_Accessibility_Directive) and the relevant [Danish law](https://www.retsinformation.dk/Forms/r0710.aspx?id=201794). In practice, this means compliance with [WCAG 2.1](https://www.w3.org/TR/WCAG21/) which is the current guideline from the World Wide Web Consortium.
+All the components in the library should - in principle - comply with the [EU Web Accessibility Directive](https://en.wikipedia.org/wiki/Web_Accessibility_Directive) and the relevant [Danish law](https://www.retsinformation.dk/Forms/r0710.aspx?id=201794). In practice, this means compliance with [WCAG 2.1](https://www.w3.org/TR/WCAG21/) which is the current guideline from the World Wide Web Consortium. Only the contextual parts that _cannot_ be automatically deduced are made the responsibility of the developer. Runtime assertions serve as a helpful enforcement mechanism during development.
 
-Only the contextual parts that _cannot_ be automatically deduced are made the responsibility of the developer. Runtime assertions serve as a helpful enforcement mechanism during development.
-
-Connecting through shared state
--------------------------------
+Shared component state
+----------------------
 In more typical UI libraries (e.g. [recom](https://github.com/day8/re-com)), you construct stateful components from one or more values - usually from **dereferenced** state - along with associated callback functions for handling mutation. Components then create a closure around their mutable inner state and (sometimes) exchange data with other components using callbacks functions, though only to the extent that the developer has explicitly defined. 
 
 In `recap`, you generally construct stateful components with a **reference** to a piece of state and _no_ callbacks. From the developer's perspective, the components may be considered a variation of [Form-2 components](https://github.com/reagent-project/reagent/blob/master/doc/CreatingReagentComponents.md#form-2--a-function-returning-a-function) where the developer injects the inner state as a function argument. Reagent's RAtoms, RCursors, Reactions (with `on-set` defined), and Wrappers can all be used directly with the UI components of this library. You don't need any special functions or macros. 
@@ -42,8 +48,8 @@ To facilitate component integration, the shape of the injected state is very gen
 ### Motivation
 I was motivated by the following considerations:
 
-1. **Components should connect through state:** Reusable components<sup>†</sup> are simpler to extend if they have read-write access to the same state. The practice of hiding component state inside a function closure is detrimental to the composability of reusable components.
-2. **Component state should be simple:** Both the component APIs and the underlying data will benefit from a design constraint that seeks to reuse state across different component types. The APIs benefit from less ceremony overall due to the de-emphasis on callback functions. The data benefits from an enforced generalisation.
+1. **Components should connect through state:** Stateful components<sup>†</sup> are simpler to integrate if they are allowed read-write access to the same state. The component APIs benefit from reduced ceremony due to a de-emphasis on callback functions.
+2. **Component state should be generic:** There are many benefits to having similarly shaped state in use across different component types. It imposes simplicity and a separation of concerns, while facilitating adhoc communication between discrete UI components by using the data itself as a protocol.
 3. **All state should be exposed:** Having access to most state through a single deref - as is common in the ClojureScript world - makes for simple debugging. If it's beneficial to expose the majority of the state why not expose state hidden away behind function closures too?
 
 The Python principle of ["we are all consenting adults here"](https://mail.python.org/pipermail/tutor/2003-October/025932.html) is relevant here. This idea is also widely practiced in the Clojure/ClojureScript world, just not when it comes to stateful reagent components.
@@ -51,14 +57,16 @@ The Python principle of ["we are all consenting adults here"](https://mail.pytho
 > _<sup>†</sup> Of course, many "dumb" components are actually completely stateless. These are not the main concern of `recap`._
 
 ### Trade-offs
+* Using the library in an opinionated frontend architecture like Re-frame<sup>†</sup> is slightly less ergonomic.
 * The user is no longer required to write call back functions, but code that relies on side-effects of callback functions is now more complicated to write (e.g. maybe you need a wrapper or a watch function).
-* The internal state of the reusable components is no longer encapsulated inside a function closure. The user should take care not to mess with the state by accident, for example by having components making incompatible changes to the same state.
+* The internal state of the stateful components is no longer encapsulated inside a function closure. The user should take care not to mess with the state by accident, for example by having components making incompatible changes to the same state.
 * Function parameters cannot be destructured inline which obfuscates the component APIs somewhat. This is one key advantage of a more traditional approach.
 
-### What about Re-frame?
-[Re-frame](https://github.com/day8/re-frame) is a great idea that solves many hurdles by totally separating business logic from DOM mutation. Unfortunately, it doesn't have a good story when it comes to creating reusable components. In fact, the architecture that Re-frame imposes on the developer basically disincentivises making components with internal state. Re-frame strongly prefers to have all data transformations occur in `subscriptions` or as part of the state machine represented by the graph of Re-frame `events`. Components in Re-frame should be as dumb as possible and hook directly into the business logic by emitting events and dereferencing subscriptions.
-
-Developers that want to use stateful components from a library such as `recap` can still do so in Re-frame (since it's just a layer on top of reagent), but doing so is slightly antithetical to Re-frame's overall design. On the other hand, Re-frame's concept of putting _all_ application state in a single place does have similar benefits to exposing _individual_ component state, albeit in a more coupled and centralised way.
+> _<sup>†</sup> [Re-frame](https://github.com/day8/re-frame) is a great idea that solves many hurdles by attempting to totally separate business logic from DOM mutation. Unfortunately, it doesn't have a good story when it comes to creating stateful components using its core abstractions._
+>
+> _In fact, the architecture that Re-frame imposes on the developer basically disincentivises making components with internal state. Re-frame strongly prefers to have all data transformations occur in `subscriptions` or as part of the state machine represented by the graph of Re-frame `events`. Components in Re-frame should be as dumb as possible and hook directly into the business logic by emitting events and dereferencing subscriptions._
+>
+> _Developers that want to use stateful components from a library such as `recap` can still do so in Re-frame (since it's just a layer on top of reagent), but doing so is slightly antithetical to Re-frame's overall design._
 
 Development prerequisites
 -------------------------
