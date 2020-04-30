@@ -25,6 +25,7 @@
 }
 
 .tab--drag {
+    pointer-events: none; /* Ignore certain strange hover events. */
     transition:
         var(--transition),
         color 0s; /* Just looks better. */
@@ -120,6 +121,15 @@
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
+}
+
+/*  Remove :hover on adjacent tab while dragging.
+    https://github.com/atlassian/react-beautiful-dnd/issues/961
+
+    TODO: fix - still hovers after dropping until cursor moves.
+    TODO: fix - identical adjacent tabs seem to not move if dropped in dropzone */
+.tab.tab--drag ~ .tab {
+    pointer-events: none;
 }
 
 .tab[aria-selected="true"] {
