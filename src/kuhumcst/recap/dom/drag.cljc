@@ -3,28 +3,7 @@
 
   All successful drops execute the code `(drop-fn (drag-fn))` in order
   to effectuate the necessary state changes."
-  (:require [clojure.string :as str]))
-
-(def bem-block
-  #"(\w-?)+")
-
-;; Assumes BEM convention is respected, i.e. only a single block class applied.
-(defn- add-modifier!
-  [element modifier]
-  (let [class-list (.-classList element)
-        class      (str (->> (array-seq class-list)
-                             (filter (partial re-matches bem-block))
-                             (first))
-                        "--" modifier)]
-    (.add class-list class)))
-
-(defn- remove-modifier!
-  [element modifier]
-  (let [class-list (.-classList element)
-        class      (->> (array-seq class-list)
-                        (filter #(str/ends-with? % (str "--" modifier)))
-                        (first))]
-    (.remove class-list class)))
+  (:require [kuhumcst.recap.dom.interop :as interop]))
 
 (def drag-fns
   "Temporary storage for drag-fns."
@@ -52,12 +31,12 @@
       (.setData dt "fn" drag-id)
       ;; Modifying a dragged element after an onDragStart event will glitch both
       ;; Chrome and Safari, making this slight delay necessary. Firefox is OK.
-      (js/setTimeout #(add-modifier! element "drag") 20))))
+      (js/setTimeout #(interop/add-modifier! element "drag") 20))))
 
 (defn on-drag-end
   []
   (fn [e]
-    (remove-modifier! (.-target e) "drag")))
+    (interop/remove-modifier! (.-target e) "drag")))
 
 ;; The onDragOver handler is needed for drag-and-drop to work.
 (defn on-drag-over
@@ -70,13 +49,13 @@
   []
   (fn [e]
     (.preventDefault e)
-    (add-modifier! (.-target e) "drag-over")))
+    (interop/add-modifier! (.-target e) "drag-over")))
 
 (defn on-drag-leave
   []
   (fn [e]
     (.preventDefault e)
-    (remove-modifier! (.-target e) "drag-over")))
+    (interop/remove-modifier! (.-target e) "drag-over")))
 
 (defn on-drop
   "The `drop-fn` is called with the drag-fn's output as its input on a
@@ -84,7 +63,7 @@
   [drop-fn]
   (fn [e]
     (.preventDefault e)
-    (remove-modifier! (.-target e) "drag-over")
+    (interop/remove-modifier! (.-target e) "drag-over")
     (let [drag-id (.getData (.-dataTransfer e) "fn")
           {:keys [drag-fn ghost]} (get @drag-fns drag-id)]
       (when drag-fn
