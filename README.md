@@ -1,10 +1,13 @@
 recap
 =====
-The `recap`<sup>†</sup> project is an ongoing effort to create a collection of accessible, adaptive UI components that connect dynamically through shared state.
+The `recap`<sup>[†](#note-name)</sup> library is an effort to foster [rapid application development](https://en.wikipedia.org/wiki/Rapid_application_development) through a collection of accessible, adaptive [reagent](https://github.com/reagent-project/reagent) components that communicate dynamically using state itself as a protocol. This should yield a UI that is simple to reason about, less mechanical to connect, and more declarative overall.
 
-This library is my take on how to build [reagent](https://github.com/reagent-project/reagent) components that are simpler to reason about, less mechanical to connect, and more declarative overall. It is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [tei-facsimile](https://github.com/kuhumcst/tei-facsimile) viewer.
+The library is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [tei-facsimile](https://github.com/kuhumcst/tei-facsimile) viewer as part of the _"Infrastrukturalisme"_ project, a joint effort between the University of Copenhagen and Aarhus University.
 
-> _<sup>†</sup> Or more correctly, **ReCAP**, as it is an abbreviation of "**Re**agent **C**omponents for **A**cademic **P**rojects"._
+### Function > form
+The library focuses _specifically_ on frontend development for data-centric systems. While it is highly modular, **no special effort** has been made to support a custom branded experience. Knowing that fashion is fleeting, the default designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style. Whenever a choice had to be made, form always yields to function.
+
+> _<a name="note-name"><sup>†</sup></a> Or more correctly, **ReCAP**, as it is an abbreviation of "**Re**agent **C**omponents for **A**cademic **P**rojects"._
 
 Adaptive user interfaces
 ------------------------
@@ -19,8 +22,6 @@ Anticipating the varied needs of both current and future end users, UIs built wi
 1. **Components should be tangible:** Most of the components can be reordered, resized, or otherwise customised by the end user to fit their individual workflow.
 2. **Components should be contextual:** Many components will visually connect with nearby elements by morphing their styling accordingly.
 3. **Devices are different:** The components are responsive and will adapt to different screen sizes. Alternative input methods like keyboard and touch gestures are also supported.
-
-Knowing that fashion is fleeting, the default designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style.
 
 Accessibility semantics
 -----------------------
@@ -48,21 +49,21 @@ To facilitate component integration, the shape of the injected state is very gen
 ### Motivation
 I was motivated by the following considerations:
 
-1. **Components should connect through state:** Stateful components<sup>†</sup> are simpler to integrate if they are allowed read-write access to the same state. The component APIs benefit from reduced ceremony due to a de-emphasis on callback functions.
+1. **Components should connect through state:** Stateful components<sup>[†](#note-state)</sup> are simpler to integrate if they are allowed read-write access to the same state. The component APIs benefit from reduced ceremony due to a de-emphasis on callback functions.
 2. **Component state should be generic:** There are many benefits to having similarly shaped state in use across different component types. It imposes simplicity and a separation of concerns, while facilitating adhoc communication between discrete UI components by using the data itself as a protocol.
 3. **All state should be exposed:** Having access to most state through a single deref - as is common in the ClojureScript world - makes for simple debugging. If it's beneficial to expose the majority of the state why not expose state hidden away behind function closures too?
 
 The Python principle of ["we are all consenting adults here"](https://mail.python.org/pipermail/tutor/2003-October/025932.html) is relevant here. This idea is also widely practiced in the Clojure/ClojureScript world, just not when it comes to stateful reagent components.
 
-> _<sup>†</sup> Of course, many "dumb" components are actually completely stateless. These are not the main concern of `recap`._
+> _<a name="note-state"><sup>†</sup></a> Of course, many "dumb" components are actually completely stateless. These are not the main concern of `recap`._
 
 ### Trade-offs
-* Using the library in an opinionated frontend architecture like Re-frame<sup>†</sup> is slightly less ergonomic.
+* Using the library in an opinionated frontend architecture like Re-frame<sup>[†](#note-re-frame)</sup> is slightly less ergonomic.
 * The user is no longer required to write call back functions, but code that relies on side-effects of callback functions is now more complicated to write (e.g. maybe you need a wrapper or a watch function).
 * The internal state of the stateful components is no longer encapsulated inside a function closure. The user should take care not to mess with the state by accident, for example by having components making incompatible changes to the same state.
 * Function parameters cannot be destructured inline which obfuscates the component APIs somewhat. This is one key advantage of a more traditional approach.
 
-> _<sup>†</sup> [Re-frame](https://github.com/day8/re-frame) is a great idea that solves many hurdles by attempting to totally separate business logic from DOM mutation. Unfortunately, it doesn't have a good story when it comes to creating stateful components using its core abstractions._
+> _<a name="note-re-frame"><sup>†</sup></a> [Re-frame](https://github.com/day8/re-frame) is a great idea that solves many hurdles by attempting to totally separate business logic from DOM mutation. Unfortunately, it doesn't have a good story when it comes to creating stateful components using its core abstractions._
 >
 > _In fact, the architecture that Re-frame imposes on the developer basically disincentivises making components with internal state. Re-frame strongly prefers to have all data transformations occur in `subscriptions` or as part of the state machine represented by the graph of Re-frame `events`. Components in Re-frame should be as dumb as possible and hook directly into the business logic by emitting events and dereferencing subscriptions._
 >
