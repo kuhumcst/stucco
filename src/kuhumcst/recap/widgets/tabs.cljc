@@ -2,11 +2,11 @@
   "Reagent components for creating a tabbed UI.
 
   Shared state for tab components:
-    `kvs` - key-value pairs of tab labels and bodies.
-    `i`   - (optional) the index of the currently selected tab.
+    :kvs - key-value pairs of tab labels and bodies.
+    :i   - (optional) the index of the currently selected tab.
 
-  Shared opts for tab components:
-    `tab-list-id` - a unique id attribute for the tab-list.
+  Various opts for tab components:
+    :id - a unique id attribute for the tab-list.
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
@@ -16,6 +16,7 @@
             [kuhumcst.recap.state :as state]
             [kuhumcst.recap.util :as util]))
 
+;; TODO: fix drag and drop bug from circa middle to right-of-middle
 ;; TODO: find some way to remove dropzone when full width of tabs
 ;; TODO: complete a11y
 
@@ -37,8 +38,8 @@
           (> n i) (max 0 i))})                              ; stay in place
 
 (defn- mk-tab-id
-  [tab-list-id n]
-  (str tab-list-id "-" n))
+  [parent-id n]
+  (str parent-id "-" n))
 
 (defn heterostyled
   "Apply heterogeneous styling to tab `kvs`."
@@ -58,27 +59,28 @@
 
 (defn tab-list
   "The tabs available in the `state`."
-  [state {:keys [tab-list-id] :as opts}]
+  [{:keys [kvs i] :as state}
+   {:keys [id] :as opts}]
   (state/assert-conforms ::state/kvs+i state)
   (let [{:keys [kvs i] :or {i 0}} @state
         length (count kvs)
         append (fn [kv]
                  ;; Internal drops will have no increase in tab count, so when
                  ;; appending inside the same tab-list we must account for it.
-                 (if (= tab-list-id (:tab-list-id (meta kv)))
+                 (if (= id (:id (meta kv)))
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
     [:div.tab-list {:role        "tablist"
-                    :id          tab-list-id
+                    :id          id
                     :on-key-down kbd/roving-tabindex-handler}
      (for [n (range length)
            :let [kv        (nth kvs n)
                  selected? (= n i)
-                 id        (mk-tab-id tab-list-id n)
+                 tab-id    (mk-tab-id id n)
                  delete    (fn []
                              (swap! state mk-drag-state n)
                              (vary-meta kv assoc
-                                        :tab-list-id tab-list-id
+                                        :id id
                                         :selected? selected?))
                  insert    (fn [kv]
                              (swap! state mk-drop-state n kv))
@@ -87,7 +89,7 @@
        ;; Would prefer using button, but FF excludes its padding from drag area.
        [:span.tab {:role          "tab"
                    :key           (hash [kvs i n])
-                   :id            id
+                   :id            tab-id
                    :ref           focus/accept!
                    :style         (:style (meta kv))
                    :aria-selected selected?
@@ -109,21 +111,23 @@
 
 (defn tab-panel
   "The currently selected tab-panel of the `state`."
-  [state {:keys [tab-list-id] :as opts}]
+  [{:keys [kvs i] :as state}
+   {:keys [id] :as opts}]
   (state/assert-conforms ::state/kvs+i state)
   (let [{:keys [kvs i] :or {i 0}} @state
         [_ v :as kv] (when (not-empty kvs)
                        (nth kvs i))]
     (when v
       [:section.tab-panel {:role            "tabpanel"
-                           :aria-labelledby (mk-tab-id tab-list-id i)
+                           :aria-labelledby (mk-tab-id id i)
                            :style           (:style (meta kv))}
        v])))
 
 (defn tabs
   "Merged view of the tab-list and the tab-panel of the currently selected tab.
   Takes `state` of the form described in the docstring of this namespace."
-  [state {:keys [tab-list-id] :as opts}]
+  [{:keys [kvs i] :as state}
+   {:keys [id] :as opts}]
   [:article.tabs
    [tab-list state opts]
    [tab-panel state opts]])

@@ -6,6 +6,11 @@
 (s/def ::i
   int?)
 
+;; Stricter interpretation more in line with the `coll` in `(nth coll n)` than
+;; the `coll?` predicate that annoyingly accepts maps and sets too.
+(s/def ::coll
+  sequential?)
+
 (s/def ::kv
   (s/tuple any? any?))
 

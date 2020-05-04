@@ -30,35 +30,31 @@
   laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu,
   feugiat in, orci. In hac habitasse platea dictumst.")
 
-(defn padded
-  [& elements]
-  (into [:div {:style {:padding 10}}] elements))
-
 (def tabs-big
-  [["Lorem ipsum" [padded
+  [["Lorem ipsum" [:<>
                    [:p lorem-ipsum-1]
                    [:p lorem-ipsum-2]]]
-   ["Something else" [padded
+   ["Something else" [:<>
                       [:h1 "A title"]
                       [:p "Something entirely different"]]]
-   ["Third tab" [padded
+   ["Third tab" [:<>
                  [:h1 "More lorem ipsum"]
                  [:p lorem-ipsum-1]]]
-   ["Fourth" [padded
+   ["Fourth" [:<>
               [:h1 "Even more lorem ipsum!!!"]
               [:p lorem-ipsum-2]]]
-   ["Fifth" [padded
+   ["Fifth" [:<>
              [:h1 "Even more lorem ipsum!!!"]
              [:p lorem-ipsum-2]]]
-   ["Sixth" [padded
+   ["Sixth" [:<>
              [:h1 "Even more lorem ipsum!!!"]
              [:p lorem-ipsum-2]]]])
 
 (def tabs-small
-  [["1" [padded "One"]]
-   ["2" [padded "Two"]]
-   ["3" [padded "Three"]]
-   ["4" [padded "Four"]]])
+  [["1" "One"]
+   ["2" "Two"]
+   ["3" "Three"]
+   ["4" "Four"]])
 
 (defonce tabs-ratom
   (r/atom {:kvs (tabs/heterostyled tabs-big)
@@ -110,21 +106,21 @@
    #_[layout/root landmarks]
 
    ;; Using ratom as state.
-   [tabs tabs-ratom {:tab-list-id "ratom"}]
+   [tabs tabs-ratom {:id "ratom"}]
    [:br]
 
    ;; Using cursor as state.
    #_[:pre
       "cursor: " (with-out-str (pprint @tabs-cursor))
       "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tabs tabs-cursor {:tab-list-id "cursor"}]
+   [tabs tabs-cursor {:id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
    #_[:pre
       "reaction ratom: " (with-out-str (pprint @tabs-reaction))
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tabs tabs-reaction {:tab-list-id "reaction"}]
+   [tabs tabs-reaction {:id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
@@ -133,7 +129,7 @@
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
    [tabs (r/wrap @tabs-ratom-for-wrapper
                  reset! tabs-ratom-for-wrapper)
-    {:tab-list-id "wrapper"}]
+    {:id "wrapper"}]
    [:br]])
 
 (def root
