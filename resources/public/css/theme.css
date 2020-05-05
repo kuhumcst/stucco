@@ -14,9 +14,12 @@
 
     /* Variations. */
     --font-size-s: 14px;
-    --padding-s: 8px;
+    --padding-s: 4px;
     --padding-l: 16px;
     --padding-xl: 32px;
+    --margin-s: 4px;
+    --margin-l: 16px;
+    --margin-xl: 32px;
     --inactive-filter: brightness(0.8);
     --inactive-filter-focus: brightness(0.95);
     --inactive-border: 1px solid #DDD;

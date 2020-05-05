@@ -1,0 +1,73 @@
+.carousel > .slide-picker + .slides {
+    margin-top: var(--margin);
+}
+
+.slide-picker {
+    display: flex;
+    justify-content: center;
+}
+
+.slide-picker__dot {
+    cursor: pointer;
+    height: 8px;
+    width: 8px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.slide-picker__dot + .slide-picker__dot {
+    margin-left: var(--margin);
+}
+
+.slides {
+    display: flex;
+    justify-content: center;
+}
+
+.slides__slide {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden; /* Also fixes internal drop area when dragging. */
+    text-overflow: ellipsis;
+
+    transition: var(--transition);
+    padding: var(--padding);
+    background: var(--background);
+    border: var(--border);
+    border-radius: var(--border-radius);
+}
+
+.slides__select {
+    width: 0;
+    max-width: var(--margin-l);
+    margin: var(--margin) 0 var(--margin) 0;
+    transition: var(--transition);
+    background: var(--background);
+    filter: var(--inactive-filter);
+    border: var(--border);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-right: none; /* Only before visible slides. */
+    opacity: 0;
+    box-shadow: inset -8px 0px 8px -8px rgba(0,0,0,0.4);
+}
+
+/* Removes the left border instead of the right. */
+.slides__slide ~ .slides__select {
+    border: var(--border);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    border-left: none;
+    box-shadow: inset 8px 0px 8px -8px rgba(0,0,0,0.4);
+}
+
+.slides__select--visible {
+    width: 10%;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.slides__select:hover,
+.slides__select:focus {
+    cursor: click;
+    filter: var(--inactive-filter-focus);
+}

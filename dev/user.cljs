@@ -6,6 +6,7 @@
             [kuhumcst.recap.layout.core :as layout]
             [kuhumcst.recap.layout.landmarks :as landmarks]
             [kuhumcst.recap.widgets.lens :as lens]
+            [kuhumcst.recap.widgets.carousel :refer [carousel]]
             [kuhumcst.recap.widgets.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
@@ -102,6 +103,12 @@
   []
   [:<>
    [lens/code code-lens-state]
+   [carousel {:i    0
+              :coll [1 2 3]}]
+   [:br]
+   [carousel (r/atom {:i    2
+                      :coll ["testing" "a" "ratom"]})]
+   [:br]
 
    #_[layout/root landmarks]
 

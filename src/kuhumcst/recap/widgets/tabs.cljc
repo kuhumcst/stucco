@@ -59,7 +59,7 @@
   "The tabs available in the `state`."
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]
-  (state/assert-conforms ::state/kvs+i state)
+  (state/assert-valid state ::state/kvs+i)
   (let [{:keys [kvs i] :or {i 0}} @state
         length (count kvs)
         append (fn [kv]
@@ -111,7 +111,7 @@
   "The currently selected tab-panel of the `state`."
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]
-  (state/assert-conforms ::state/kvs+i state)
+  (state/assert-valid state ::state/kvs+i)
   (let [{:keys [kvs i] :or {i 0}} @state
         [_ v :as kv] (when (not-empty kvs)
                        (nth kvs i))]
