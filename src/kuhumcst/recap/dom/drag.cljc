@@ -21,21 +21,32 @@
           ghost    (.cloneNode element true)]
       (swap! drag-fns assoc drag-id {:drag-fn drag-fn
                                      :ghost   ghost})
+      ;; TODO: what about other effects, i.e. copy?
+      (set! (.-effectAllowed dt) "move")
+      (set! (.-dropEffect dt) "move")
+      (.setData dt "fn" drag-id)
+
       ;; The ghost is so we can differentiate source and the drag image styling.
       (.add (.-classList ghost) "--ghost")
       (.setAttribute ghost "aria-hidden" "true")
       (js/document.body.appendChild ghost)
       (.setDragImage dt ghost x-offset y-offset)
-      (set! (.-effectAllowed dt) "move")
-      (set! (.-dropEffect dt) "move")
-      (.setData dt "fn" drag-id)
+
       ;; Modifying a dragged element after an onDragStart event will glitch both
       ;; Chrome and Safari, making this slight delay necessary. Firefox is OK.
-      (js/setTimeout #(interop/add-modifier! element "drag") 20))))
+      ;; The drag-parent modifier class is also necessary to disable :hover
+      ;; effects. Chrome seems to otherwise temporarily remove the DOM element,
+      ;; triggering :hover on the element to the right.
+      (js/setTimeout
+        (fn []
+          (interop/add-modifier! (.-parentNode element) "drag-parent")
+          (interop/add-modifier! element "drag"))
+        100))))
 
 (defn on-drag-end
   []
   (fn [e]
+    (interop/remove-modifier! (.-parentNode (.-target e)) "drag-parent")
     (interop/remove-modifier! (.-target e) "drag")))
 
 ;; The onDragOver handler is needed for drag-and-drop to work.

@@ -115,21 +115,13 @@
     outline: none;
 }
 
-.tab:hover,
+/* :not(.tab-list--drag-parent) fixes Chrome :hover on adjacent element. */
+.tab-list:not(.tab-list--drag-parent) .tab:hover,
 .tab:focus {
     filter: var(--inactive-filter-focus);
 
     /* Fix missing outline border on infixed labels. */
     z-index: 1;
-}
-
-/*  Remove :hover on adjacent tab while dragging.
-    https://github.com/atlassian/react-beautiful-dnd/issues/961
-
-    TODO: fix - still hovers after dropping until cursor moves.
-    TODO: fix - identical adjacent tabs seem to not move if dropped in dropzone */
-.tab.tab--drag ~ .tab {
-    pointer-events: none;
 }
 
 .tab[aria-selected="true"] {

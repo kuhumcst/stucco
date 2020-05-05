@@ -16,7 +16,6 @@
             [kuhumcst.recap.state :as state]
             [kuhumcst.recap.util :as util]))
 
-;; TODO: fix drag and drop bug from circa middle to right-of-middle
 ;; TODO: find some way to remove dropzone when full width of tabs
 ;; TODO: complete a11y
 
