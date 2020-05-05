@@ -16,7 +16,6 @@
             [kuhumcst.recap.state :as state]
             [kuhumcst.recap.util :as util]))
 
-;; TODO: find some way to remove dropzone when full width of tabs
 ;; TODO: complete a11y
 
 (defn- mk-drag-state
@@ -69,11 +68,15 @@
                  (if (= id (:id (meta kv)))
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
-    [:div.tab-list {:role        "tablist"
-                    :id          id
-                    :on-key-down kbd/roving-tabindex-handler}
+    [:div.tab-list {:role          "tablist"
+                    :id            id
+                    :on-key-down   kbd/roving-tabindex-handler
+                    :on-drag-enter (drag/on-drag-enter)
+                    :on-drag-over  (drag/on-drag-over)
+                    :on-drag-leave (drag/on-drag-leave)
+                    :on-drop       (drag/on-drop append)}
      (for [n (range length)
-           :let [kv        (nth kvs n)
+           :let [[k _ :as kv] (nth kvs n)
                  selected? (= n i)
                  tab-id    (mk-tab-id id n)
                  delete    (fn []
@@ -102,11 +105,7 @@
                    :on-drag-over  (drag/on-drag-over)
                    :on-drag-leave (drag/on-drag-leave)
                    :on-drop       (drag/on-drop insert)}
-        (first kv)])
-     [:span.tab-dropzone {:on-drag-enter (drag/on-drag-enter)
-                          :on-drag-over  (drag/on-drag-over)
-                          :on-drag-leave (drag/on-drag-leave)
-                          :on-drop       (drag/on-drop append)}]]))
+        k])]))
 
 (defn tab-panel
   "The currently selected tab-panel of the `state`."

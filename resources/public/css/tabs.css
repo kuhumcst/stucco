@@ -1,5 +1,29 @@
 .tab-list {
     display: flex;
+    height: 36px; /* TODO: calculate dynamically? */
+
+    transition: var(--transition);
+
+    border: var(--transparent-border);
+    border-bottom: var(--border);
+    border-top-right-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+}
+
+.tab-list--drag-over {
+     background: var(--background);
+     border: var(--inactive-border);
+     border-bottom: var(--border);
+     box-shadow:
+         inset 8px 0px 16px -8px rgba(0,0,0,0.1),
+         inset -8px 0px 16px -8px rgba(0,0,0,0.1),
+         inset 0px -8px 16px -8px rgba(0,0,0,0.1);
+}
+
+.tab-list:empty {
+    background: var(--background);
+    border-radius: var(--border-radius);
+    border: var(--inactive-border);
 }
 
 .tab {
@@ -22,6 +46,18 @@
     border-right: none;
     text-transform: uppercase;
     letter-spacing: 2px;
+
+    /* Cover tab-list borders. */
+    margin-bottom: calc(0px - var(--border-width));
+    margin-top: calc(0px - var(--border-width));
+}
+
+/* Cover tab-list borders. */
+.tab:first-child {
+    margin-left: calc(0px - var(--border-width));
+}
+.tab:last-child {
+    margin-right: calc(0px - var(--border-width));
 }
 
 .tab--drag {
@@ -36,60 +72,14 @@
     color: transparent;
 }
 
-/* Shouldn't transition when put at the end of tab-list. */
-.tab:nth-last-child(2) {
+/* Shouldn't transition at the end of tab-list. */
+.tab:last-child.tab--drag {
     transition: all 0s;
 }
 
-/* Looks much better and fixes issue with transparent border... somehow! */
-.tab:nth-last-child(2).tab--drag {
-    border-right: none;
-}
-
-.tab-dropzone {
-    transition: var(--transition);
-    flex-grow: 1;
-    height: 36px; /* TODO: calculate dynamically? */
-
-    border: var(--transparent-border);
-    border-bottom: var(--border);
-    border-left-width: 0;
-    border-top-right-radius:  var(--border-radius);
-}
-
-/* --drag-over is used as a pattern. */
-.tab-dropzone--drag-over {
-    background: var(--background);
-    border: var(--inactive-border);
-    border-bottom: var(--border);
-    box-shadow:
-        inset 8px 0px 16px -8px rgba(0,0,0,0.1),
-        inset -8px 0px 16px -8px rgba(0,0,0,0.1),
-        inset 0px -8px 16px -8px rgba(0,0,0,0.1);
-}
-
-/* An empty tab-list (= only a dropzone). */
-.tab-dropzone:first-child {
-    background: var(--background);
-    border-radius: var(--border-radius);
-    border: var(--inactive-border);
-}
-
-.tab.tab--drag + .tab-dropzone {
-    transition: var(--transition), border-left 0s;
-    border-left: var(--border);
-}
-
-.tab:first-child.tab--drag + .tab-dropzone {
-    transition: var(--transition);
-    border-left-color: transparent;
-}
-
-.tab:first-child.tab--drag + .tab-dropzone.tab-dropzone--drag-over {
-    transition: var(--transition);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    border: var(--inactive-border);
-    border-bottom: var(--border);
+/* Fixes issue with border... somehow! */
+.tab:first-child:last-child.tab--drag {
+    border: none;
 }
 
 .tab[aria-selected="true"] ~ .tab {
@@ -102,12 +92,9 @@
     border-top-left-radius: var(--border-radius);
 }
 
-.tab:nth-last-child(2) {
-    border-right: var(--border);
-}
-
 .tab:last-child {
     border-top-right-radius: var(--border-radius);
+    border-right: var(--border);
 }
 
 /* Keeping the outline (the default behaviour) sucks. */
@@ -116,7 +103,7 @@
 }
 
 /* :not(.tab-list--drag-parent) fixes Chrome :hover on adjacent element. */
-.tab-list:not(.tab-list--drag-parent) .tab:hover,
+.tab-list:not(.tab-list--drag-parent) > .tab:hover,
 .tab:focus {
     filter: var(--inactive-filter-focus);
 
@@ -124,7 +111,8 @@
     z-index: 1;
 }
 
-.tab[aria-selected="true"] {
+.tab[aria-selected="true"],
+.tab-list:not(.tab-list--drag-parent) > .tab[aria-selected="true"]:hover {
     background: var(--background);
     filter: var(--filter);
     box-shadow: none;
