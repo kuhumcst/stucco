@@ -4,9 +4,6 @@ The `recap`<sup>[†](#note-name)</sup> library is an effort to foster [rapid ap
 
 The library is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [tei-facsimile](https://github.com/kuhumcst/tei-facsimile) viewer as part of the _"Infrastrukturalisme"_ project, a joint effort between the University of Copenhagen and Aarhus University.
 
-### Function > form
-The library focuses _specifically_ on frontend development for data-centric systems. While it is highly modular, **no special effort** has been made to support a custom branded experience. Knowing that fashion is fleeting, the default designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style. Whenever a choice had to be made, form always yields to function.
-
 > _<a name="note-name"><sup>†</sup></a> Or more correctly, **ReCAP**, as it is an abbreviation of "**Re**agent **C**omponents for **A**cademic **P**rojects"._
 
 Adaptive user interfaces
@@ -22,6 +19,8 @@ Anticipating the varied needs of both current and future end users, UIs built wi
 1. **Components should be tangible:** Most of the components can be reordered, resized, or otherwise customised by the end user to fit their individual workflow.
 2. **Components should be contextual:** Many components will visually connect with nearby elements by morphing their styling accordingly.
 3. **Devices are different:** The components are responsive and will adapt to different screen sizes. Alternative input methods like keyboard and touch gestures are also supported.
+
+The library focuses _specifically_ on frontend development for data-centric systems. While it is highly modular, **no special effort** has been made to support a custom branded experience. Knowing that fashion is fleeting, the default designs of the components do not necessarily follow all the trends of the day, but rather lean towards a more utilitarian, evergreen style. Whenever a choice had to be made, form always yields to function.
 
 Accessibility semantics
 -----------------------
