@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.widgets.carousel
+(ns recap.widgets.carousel
   "Reagent components for displaying slides in a carousel.
 
   Shared state for tab components:
@@ -8,7 +8,7 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#carousel"
   (:require [reagent.core :as r]
-            [kuhumcst.recap.state :as state]))
+            [recap.state :as state]))
 
 ;; TODO: a11y, keyboard nav, docstrings
 ;; https://ux.stackexchange.com/questions/13951/what-is-the-difference-between-a-slider-a-gallery-and-a-carousel

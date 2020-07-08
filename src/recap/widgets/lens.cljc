@@ -1,9 +1,9 @@
-(ns kuhumcst.recap.widgets.lens
+(ns recap.widgets.lens
   "Reagent components for inspecting generic data."
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]
-            [kuhumcst.recap.dom.drag :as drag]))
+            [recap.dom.drag :as drag]))
 
 ;; TODO: incorrect for any combination of ns and symbol containing $
 (defn- f->symbol

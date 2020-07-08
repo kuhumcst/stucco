@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.dom.interop
+(ns recap.dom.interop
   (:require [clojure.string :as str]))
 
 (def bem-block

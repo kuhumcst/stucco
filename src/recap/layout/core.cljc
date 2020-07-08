@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.layout.core
+(ns recap.layout.core
   "Reagent components to make page layouts from top-level Landmark Regions.
 
   ARIA reference:

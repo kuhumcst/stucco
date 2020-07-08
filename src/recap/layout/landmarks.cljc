@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.layout.landmarks
+(ns recap.layout.landmarks
   "Reagent components for populating ARIA Landmark Regions.
 
   ARIA reference:

@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.state
+(ns recap.state
   "Specs describing the shape of all state used in recap components."
   (:require [clojure.spec.alpha :as s]
             [reagent.core :as r]))

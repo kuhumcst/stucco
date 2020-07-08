@@ -1,6 +1,6 @@
-(ns kuhumcst.recap.tabs-test
+(ns recap.tabs-test
   (:require [clojure.test :refer [deftest testing is]]
-            [kuhumcst.recap.tabs :as tabs]))
+            [recap.tabs :as tabs]))
 
 (def kvs-1
   [[:a :a]

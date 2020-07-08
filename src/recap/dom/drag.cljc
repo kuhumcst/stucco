@@ -1,9 +1,9 @@
-(ns kuhumcst.recap.dom.drag
+(ns recap.dom.drag
   "A functional take on drag-and-drop.
 
   All successful drops execute the code `(drop-fn (drag-fn))` in order
   to effectuate the necessary state changes."
-  (:require [kuhumcst.recap.dom.interop :as interop]))
+  (:require [recap.dom.interop :as interop]))
 
 (def drag-fns
   "Temporary storage for drag-fns."

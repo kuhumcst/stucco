@@ -1,11 +1,11 @@
-(ns kuhumcst.recap.dom.keyboard
+(ns recap.dom.keyboard
   "Helpers for ARIA-compliant keyboard navigation.
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#keyboard"
   (:require [clojure.set :as set]
-            [kuhumcst.recap.dom.focus :as focus]
-            [kuhumcst.recap.dom.key :as key]))
+            [recap.dom.focus :as focus]
+            [recap.dom.key :as key]))
 
 ;; https://javascript.info/bubbling-and-capturing
 ;; https://www.mutuallyhuman.com/blog/keydown-is-the-only-keyboard-event-we-need/

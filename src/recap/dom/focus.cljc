@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.dom.focus
+(ns recap.dom.focus
   "Global DOM manipulation.")
 
 (def ^:dynamic *requested-focus*

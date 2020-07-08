@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.util)
+(ns recap.util)
 
 (defn vec-dissoc
   [coll n]

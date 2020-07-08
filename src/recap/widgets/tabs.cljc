@@ -1,4 +1,4 @@
-(ns kuhumcst.recap.widgets.tabs
+(ns recap.widgets.tabs
   "Reagent components for creating a tabbed UI.
 
   Shared state for tab components:
@@ -10,11 +10,11 @@
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
-  (:require [kuhumcst.recap.dom.focus :as focus]
-            [kuhumcst.recap.dom.drag :as drag]
-            [kuhumcst.recap.dom.keyboard :as kbd]
-            [kuhumcst.recap.state :as state]
-            [kuhumcst.recap.util :as util]))
+  (:require [recap.dom.focus :as focus]
+            [recap.dom.drag :as drag]
+            [recap.dom.keyboard :as kbd]
+            [recap.state :as state]
+            [recap.util :as util]))
 
 ;; TODO: complete a11y
 

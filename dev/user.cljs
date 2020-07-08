@@ -3,11 +3,11 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [kuhumcst.recap.layout.core :as layout]
-            [kuhumcst.recap.layout.landmarks :as landmarks]
-            [kuhumcst.recap.widgets.lens :as lens]
-            [kuhumcst.recap.widgets.carousel :refer [carousel]]
-            [kuhumcst.recap.widgets.tabs :refer [tabs] :as tabs]))
+            [recap.layout.core :as layout]
+            [recap.layout.landmarks :as landmarks]
+            [recap.widgets.lens :as lens]
+            [recap.widgets.carousel :refer [carousel]]
+            [recap.widgets.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
