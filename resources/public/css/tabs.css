@@ -34,7 +34,7 @@
     cursor: grab;
     color: var(--color);
     font-size: var(--font-size);
-    font-family: var(--heading-font-family);
+    font-family: var(--font-family-heading);
     padding: var(--padding) var(--padding-xl);
     display: inline-block;
     background: var(--background);

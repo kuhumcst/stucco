@@ -46,7 +46,7 @@
   Focus moves between adjacent DOM siblings with the same ARIA role.
 
   Requires :on-click and :role to have been set on the affected elements.
-  The elements should also update their :tabindex attribute reactively.
+  The elements should also update their :tab-index attribute reactively.
 
   ARIA references:
     https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_general_within"

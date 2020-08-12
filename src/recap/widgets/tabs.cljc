@@ -16,8 +16,6 @@
             [recap.state :as state]
             [recap.util :as util]))
 
-;; TODO: complete a11y
-
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
   {:kvs (util/vec-dissoc kvs n)
@@ -38,6 +36,10 @@
 (defn- mk-tab-id
   [parent-id n]
   (str parent-id "-" n))
+
+(defn- mk-tab-panel-id
+  [parent-id]
+  (str parent-id "-tabpanel"))
 
 (defn heterostyled
   "Apply heterogeneous styling to tab `kvs`."
@@ -69,6 +71,7 @@
                    (swap! state mk-drop-state (dec length) kv)
                    (swap! state mk-drop-state length kv)))]
     [:div.tab-list {:role          "tablist"
+                    :aria-label    "Choose a tab to display" ;TODO: localisation
                     :id            id
                     :on-key-down   kbd/roving-tabindex-handler
                     :on-drag-enter (drag/on-drag-enter)
@@ -95,6 +98,8 @@
                    :ref           focus/accept!
                    :style         (:style (meta kv))
                    :aria-selected selected?
+                   :aria-controls (mk-tab-panel-id id)
+                   :aria-label    (str "View tab number " (inc n)) ;TODO: localisation
                    :tab-index     (if selected? "0" "-1")
                    :auto-focus    selected?
                    :on-click      select
@@ -117,6 +122,7 @@
                        (nth kvs i))]
     (when v
       [:section.tab-panel {:role            "tabpanel"
+                           :id              (mk-tab-panel-id id)
                            :aria-labelledby (mk-tab-id id i)
                            :style           (:style (meta kv))}
        v])))

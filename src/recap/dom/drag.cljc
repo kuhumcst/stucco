@@ -43,6 +43,7 @@
           (interop/add-modifier! element "drag"))
         100))))
 
+;; TODO: does not fire when the drag is internal - fix!
 (defn on-drag-end
   []
   (fn [e]

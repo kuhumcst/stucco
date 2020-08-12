@@ -1,4 +1,5 @@
 (ns recap.css
+  "CSS content available programmatically for use in the Shadow DOM."
   (:require [shadow.resource :as resource]
             [clojure.string :as str]))
 
@@ -12,6 +13,7 @@
   (resource/inline "public/css/theme.css"))
 
 (def shadow-style
+  "The combined CSS content - including the default theme - for all widgets."
   (let [titles (->> (keys resources)
                     (map #(str "\n\n/*\n\t === " (name %) ".css ===\n*/\n")))
         theme  (str/replace-first default-theme ":root" ":host")]

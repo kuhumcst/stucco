@@ -31,16 +31,21 @@
   laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu,
   feugiat in, orci. In hac habitasse platea dictumst.")
 
+;; When placing components inside tab content it is important to provide a
+;; reference to an atom! Otherwise the state will not be preserved between tab
+;; changes, i.e. the index of a carousel will get reset every time the tab is
+;; repainted. Providing atom - inlined or external - preserves the state.
 (def tabs-big
-  [["Lorem ipsum" [:<>
-                   [:p lorem-ipsum-1]
-                   [:p lorem-ipsum-2]]]
-   ["Something else" [:<>
-                      [:h1 "A title"]
-                      [:p "Something entirely different"]]]
-   ["Third tab" [:<>
-                 [:h1 "More lorem ipsum"]
-                 [:p lorem-ipsum-1]]]
+  [["First" ^{:key (random-uuid)} [carousel (r/atom {:i   0
+                                                     :kvs [["Side 1" "testing"]
+                                                           ["Side 2" "a"]
+                                                           ["Side 3" "ratom"]]})
+                                   {:aria-label "Test"}]]
+   ["Second" ^{:key (random-uuid)} [carousel {:i   0
+                                              :kvs [[1 1]]}]]
+   ["Third" [:<>
+             [:h1 "More lorem ipsum"]
+             [:p lorem-ipsum-1]]]
    ["Fourth" [:<>
               [:h1 "Even more lorem ipsum!!!"]
               [:p lorem-ipsum-2]]]
@@ -103,11 +108,15 @@
   []
   [:<>
    [lens/code code-lens-state]
-   [carousel {:i    0
-              :coll [1 2 3]}]
+   [carousel {:i   0
+              :kvs [[1 [:<>
+                        [:p lorem-ipsum-1]
+                        [:p lorem-ipsum-2]]]
+                    [2 lorem-ipsum-1]
+                    [3 lorem-ipsum-2]]}]
    [:br]
-   [carousel (r/atom {:i    2
-                      :coll ["testing" "a" "ratom"]})]
+   [carousel (r/atom {:i   2
+                      :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
    [:br]
 
    #_[layout/root landmarks]

@@ -1,30 +1,50 @@
 :root {
     /* Defaults. */
     --background: #FFF;
-    --border-radius: 3px;
-    --color: #222;
-    --font-size: 14px;
-    --border-width: 1px;
-    --border-color: #888;
     --border: 1px solid #888;
-    --padding: 8px;
-    --margin: 8px;
-    --transition: all 0.3s;
+    --border-color: #888;
+    --border-radius: 2px;
+    --border-width: 1px;
+    --color: #222;
     --filter: brightness(1);
+    --font-size: 14px;
+    --margin: 8px;
+    --padding: 8px;
+    --transition: all 0.2s;
+
+    /*  Grid sizing (for width and height).
+
+        The default grid is centred on 4px increments except for --grid-2.
+        For the higher values some of the 4px increments are skipped.
+        The system mirrors common font size choices in e.g. Word processors.
+    */
+    --grid-2: 2px;
+    --grid-4: 4px;
+    --grid-8: 8px;
+    --grid-12: 12px;
+    --grid-16: 16px;
+    --grid-24: 24px;
+    --grid-32: 32px;
+    --grid-48: 48px;
+    --grid-64: 64px;
 
     /* Variations. */
-    --font-size-s: 14px;
-    --padding-s: 4px;
-    --padding-l: 16px;
-    --padding-xl: 32px;
+    --border-very-subtle: 1px solid #DDD;
+    --color-subtle: #AAA;
+    --color-very-subtle: #DDD;
+    --font-family-heading: Futura, sans-serif;
+    --font-family-metadata: "Lucida Console", Monaco, monospace;
+    --font-size-s: 12px;
+    --inactive-filter: brightness(0.9);
+    --inactive-filter-focus: brightness(1);
+    --inactive-border: 1px solid #DDD;
     --margin-s: 4px;
     --margin-l: 16px;
     --margin-xl: 32px;
-    --inactive-filter: brightness(0.8);
-    --inactive-filter-focus: brightness(0.95);
-    --inactive-border: 1px solid #DDD;
+    --padding-s: 4px;
+    --padding-l: 16px;
+    --padding-xl: 32px;
     --transparent-border: 1px solid transparent;
-    --heading-font-family: Futura, sans-serif;
 
     /* Custom. */
     --tab-background-1: #EECCEE;

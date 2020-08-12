@@ -45,6 +45,14 @@ In `recap`, you generally construct stateful components with a **reference** to 
 
 To facilitate component integration, the shape of the injected state is very generic, enabling many UI components to accept the same state. Most callback functions are unnecessary when components have this kind of direct access to shared state. And as with the accessibility enforcement mentioned above, runtime assertions continuously validate component state during development.
 
+### Mutable interfaces: an emergent advantage
+Recap features extensive drag-and-drop of interface elements. One example of this might be dragging a tab somewhere else, e.g. to another tabbed interface on the same page. When injecting mutable state - such as RAtoms - into a Recap component, the RAtoms can in fact survive a component being removed from the page and re-rendered somewhere else on the same page. The approach to state facilitates the 
+adaptive interface.
+
+In this way, complex interface elements composed of stateful reagent components are able to _preserve_ their state while being moved around on the page. The only additional code needed is wrapping the initial state with `(r/atom ...)`. You do not even need to keep a reference to the state. The implication here is that you can still inline the input args if you don't care in particular about inspecting the state.
+
+It's possible to initialise Recap components using plain data too. The components behave like typical, stateful reagent components, creating a temporary (fully internal) RAtom to contain the component state. However, using the components in this way does not allow for the above-mentioned advantage.
+
 ### Motivation
 I was motivated by the following considerations:
 
