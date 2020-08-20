@@ -57,6 +57,9 @@
                          (vary-meta kv mk-style n))
                        kvs))))
 
+;; TODO: what to do when drag-and-dropping from tabs using same state?
+;; Currently, the two tabs components have their tabs reordered, but should
+;; they duplicate the affected tab instead?
 (defn tab-list
   "The tabs available in the `state`."
   [{:keys [kvs i] :as state}

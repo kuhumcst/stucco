@@ -107,6 +107,10 @@
 (defn app
   []
   [:<>
+   [layout/combination {:vs [[carousel (r/atom {:i   2
+                                                :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
+                             [tabs tabs-ratom {:id "ratom"}]]
+                        :weights [1 2]}]
    [lens/code code-lens-state]
    [carousel {:i   0
               :kvs [[1 [:<>
@@ -122,8 +126,8 @@
    #_[layout/root landmarks]
 
    ;; Using ratom as state.
-   [tabs tabs-ratom {:id "ratom"}]
-   [:br]
+   ;[tabs tabs-ratom {:id "ratom"}]
+   ;[:br]
 
    ;; Using cursor as state.
    #_[:pre

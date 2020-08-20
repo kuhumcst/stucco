@@ -7,7 +7,8 @@
   {:carousel (resource/inline "public/css/carousel.css")
    :lens     (resource/inline "public/css/lens.css")
    :tabs     (resource/inline "public/css/tabs.css")
-   :shared   (resource/inline "public/css/shared.css")})
+   :shared   (resource/inline "public/css/shared.css")
+   :layout   (resource/inline "public/css/layout.css")})
 
 (def default-theme
   (resource/inline "public/css/theme.css"))

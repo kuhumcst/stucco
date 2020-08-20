@@ -70,7 +70,7 @@ button.carousel__select {
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     border-right: none; /* Only before visible slides. */
     opacity: 0;
-    box-shadow: inset -8px 0px 8px -8px rgba(0,0,0,0.4);
+    box-shadow: inset -4px 0px 8px 0px rgba(0,0,0,0.15);
 }
 
 /* Removes the left border instead of the right. */
@@ -78,7 +78,7 @@ button.carousel__select {
     border: var(--border);
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
     border-left: none;
-    box-shadow: inset 8px 0px 8px -8px rgba(0,0,0,0.4);
+    box-shadow: inset 4px 0px 8px 0px rgba(0,0,0,0.15);
 }
 
 button.carousel__select[tabindex="0"] {

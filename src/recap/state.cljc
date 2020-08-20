@@ -3,14 +3,17 @@
   (:require [clojure.spec.alpha :as s]
             [reagent.core :as r]))
 
+;;;; GENERIC
+
 ;; TODO: or pos-int? will require reworking tabs drag/drop code slightly
 (s/def ::i
   int?)
 
-;; Stricter interpretation more in line with the `coll` in `(nth coll n)` than
-;; the `coll?` predicate that annoyingly accepts maps and sets too.
-(s/def ::coll
-  sequential?)
+(s/def ::v
+  any?)
+
+(s/def ::vs
+  (s/coll-of ::v))
 
 (s/def ::kv
   (s/tuple any? any?))
@@ -18,12 +21,34 @@
 (s/def ::kvs
   (s/coll-of ::kv))
 
+
+;;;; SPECIFIC
+
+(s/def ::weight
+  number?)
+
+(s/def ::weights
+  (s/coll-of ::weight))
+
+
+;;;; STATE MAPS
+
 (s/def ::kvs+i
   (s/keys :req-un [::kvs]
           :opt-un [::i]))
 
-(s/def ::coll+i
-  (s/keys :req-un [::coll ::i]))
+(s/def ::vs+weights
+  (s/keys :req-un [::vs]
+          :opt-un [::weights]))
+
+;; Important global DOM state is held in this singleton state atom. Components
+;; can react directly to window content changes by deref'ing the atom or a
+;; cursor into it. For instance, certain components may need to react to window
+;; resizing events and can so do by deref'ing that value.
+(defonce window
+  (let [state (r/atom {:width js/window.innerWidth})]
+    (set! js/window.onresize #(swap! state assoc :width js/window.innerWidth))
+    state))
 
 (defn assert-valid
   "Assert that the current value of `state` conforms to the given `spec`."

@@ -5,6 +5,8 @@
   to effectuate the necessary state changes."
   (:require [recap.dom.interop :as interop]))
 
+;; TODO: safari does not display drag image, fix!
+
 (def drag-fns
   "Temporary storage for drag-fns."
   (atom {}))

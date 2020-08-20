@@ -1,0 +1,9 @@
+.combination__separator {
+    min-width: var(--grid-8);
+    transition: var(--transition);
+}
+
+.combination__separator:hover {
+    background: #EFEFEF;
+    cursor: col-resize;
+}
