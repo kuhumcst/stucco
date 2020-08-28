@@ -3,7 +3,8 @@
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark"
-  (:require [reagent.core :as r]
+  (:require [clojure.string :as str]
+            [reagent.core :as r]
             [recap.state :as state]))
 
 ;; Some landmarks only allow single instances, e.g. banner or main.
@@ -31,81 +32,62 @@
    complementary
    content-info])
 
-(defn- pixels
-  "Calculate exact pixel widths based on `weights` and the total `width`."
-  [weights width]
-  (let [sum-weights    (reduce + weights)
-        scaling-factor (/ width sum-weights)]
-    (map (partial * scaling-factor) weights)))
+;; Just a regular atom to pass state between handlers. Should not be reactive.
+(defonce resizing
+  (atom nil))
 
-;; For dealing with potentially inexact floating point comparisons.
-(defn- fuzzy=
-  "`x` equals `y`, but any deviation within a -1 to +1 bound is also valid."
-  [x y]
-  (< (dec y) x (inc y)))
+(defn- redistribute
+  "Redistribute the `weights` such that the `delta` is added to the weight at
+  index `n` and subtracted from the weight at index n+1."
+  [weights n delta]
+  (let [[before [recipient & [donor & after]]] (split-at n weights)]
+    (into (empty weights)
+          (concat before
+                  [(max 0 (+ recipient delta))
+                   (max 0 (- donor delta))]
+                  after))))
 
-(defn- mv-pixels
-  [pxs n delta]
-  (let [[before after] (split-at n pxs)]
-    (concat (butlast before)
-            [(+ (last before) delta)]
-            [(- (first after) delta)]
-            (rest after))))
-
-(defonce resize
-  (atom {}))
-
-(defonce empty-img
-  (let [img (js/document.createElement "img")]
-    (set! (.-src img) "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==")
-    img))
-
+;; TODO: less clunky css for separator (thin oval gradient?)
+;; TODO: check that (count weights) matches (count vs) - in spec?
+;; TODO: invisible overlay container for resize mouse handlers
 (defn combination
   "A combination of `vs`, with the space optionally partitioned by `weights`.
   If no `weights` are specified, each v will initially take up equal size.
   The `vs` will typically be various functionally related recap components."
   [{:keys [vs weights]
     :as   state}]
-  (r/with-let [state        (state/prepare ::state/vs+weights state)
-               window-width (r/cursor state/window [:width])]
-    @window-width
-    (let [{:keys [vs weights pxs elem]
-           :or   {weights (map (constantly 1) (range (count vs)))}} @state]
-      ;; The widget cannot be fully displayed until its width is known.
-      ;; The width is needed for the weights to be translated into pixel values.
-      ;; When the width changes, the calculated pixel values are used as weights
-      ;; to calculate a new collection of pixel values.
-      [:div {:ref (fn [e]
-                    (when (and e (not elem))
-                      (swap! state assoc :elem e)))}
-       (when elem
-         (let [key-prefix (hash vs)
-               width      (.-offsetWidth elem)
-               pxs        (if (fuzzy= (reduce + pxs) width)
-                            pxs
-                            (pixels (or pxs weights) (.-offsetWidth elem)))]
-           ;; TODO: compute minimum-width bounds?
-           ;; https://www.geeksforgeeks.org/how-to-determine-the-content-of-html-elements-overflow-or-not/
-           [:div.combination {:style {:display "flex"}}
-            (for [[n [v px]] (map-indexed vector (map vector vs pxs))
-                  :let [key   (str key-prefix "-" (hash v) "-" n)
-                        width (str "calc(" px "px - var(--grid-4))")]]
-              [:<> {:key key}
-               (when (> n 0)
-                 [:div.combination__separator
-                  {:draggable     true
-                   :on-drag-start (fn [e]
-                                    (let [dt (.-dataTransfer e)]
-                                      (.setDragImage dt empty-img 0 0)
-                                      (reset! resize {:init-x   (.-clientX e)
-                                                      :init-pxs pxs})))
-                   :on-drag       (fn [e]
-                                    (let [{:keys [init-x init-pxs]} @resize
-                                          x*    (.-clientX e)
-                                          delta (- x* init-x)
-                                          pxs*  (mv-pixels init-pxs n delta)]
-                                      (when (and (not= x* 0)
-                                                 (not= pxs* pxs))
-                                        (swap! state assoc :pxs pxs*))))}])
-               [:div {:style {:width width}}
-                v]])]))])))
+  (r/with-let [state (state/prepare ::state/vs+weights state)]
+    (let [{:keys [vs weights]
+           :or   {weights (mapv (constantly 1) (range (count vs)))}} @state
+          key-prefix  (hash vs)
+          columns     (->> weights
+                           (map #(str "minmax(min-content, " % "fr)"))
+                           (interpose "var(--grid-8)")
+                           (str/join " "))
+          resize-fn   (fn [n]
+                        (fn [e]
+                          (let [elements (.. e -target -parentNode -children)
+                                widths   (vec (for [elem (take-nth 2 elements)]
+                                                (.-offsetWidth elem)))]
+                            (reset! resizing {:widths widths
+                                              :n      (dec n)
+                                              :x      (.-clientX e)}))))
+          resize-move (fn [e]
+                        (when-let [{:keys [widths n x]} @resizing]
+                          (let [x'       (.-clientX e)
+                                delta    (- x' x)
+                                weights' (redistribute widths n delta)]
+                            (swap! state assoc :weights weights'))))
+          resize-end  #(reset! resizing nil)]
+      [:div.combination {:on-mouse-move  resize-move
+                         :on-mouse-up    resize-end
+                         :on-mouse-leave resize-end
+                         :style          {:display               "grid"
+                                          :grid-template-columns columns}}
+       (for [[n v] (map-indexed vector vs)
+             :let [key (str key-prefix "-" (hash v) "-" n)]]
+         [:<> {:key key}
+          (when (> n 0)
+            [:div.combination__separator
+             {:on-mouse-down (resize-fn n)}])
+          [:div v]])])))

@@ -104,13 +104,18 @@
 (defonce code-lens-state
   (r/atom nil))
 
+(defonce combination-atom
+  (r/atom {:vs [[carousel (r/atom {:i   2
+                                   :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
+                [carousel (r/atom {:i   2
+                                   :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
+                [tabs tabs-ratom {:id "ratom"}]]
+           :weights [1 1 2]}))
+
 (defn app
   []
   [:<>
-   [layout/combination {:vs [[carousel (r/atom {:i   2
-                                                :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
-                             [tabs tabs-ratom {:id "ratom"}]]
-                        :weights [1 2]}]
+   [layout/combination combination-atom]
    [lens/code code-lens-state]
    [carousel {:i   0
               :kvs [[1 [:<>

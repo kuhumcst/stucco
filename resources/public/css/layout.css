@@ -1,5 +1,4 @@
 .combination__separator {
-    min-width: var(--grid-8);
     transition: var(--transition);
 }
 
