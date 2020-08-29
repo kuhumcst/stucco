@@ -32,20 +32,14 @@
    complementary
    content-info])
 
-;; Just a regular atom to pass state between handlers. Should not be reactive.
-(defonce resizing
-  (atom nil))
-
 (defn- redistribute
-  "Redistribute the `weights` such that the `delta` is added to the weight at
-  index `n` and subtracted from the weight at index n+1."
+  "Redistribute `weights` such that the `delta` is subtracted from the weight at
+  index `n` and added to the weight at index n-1."
   [weights n delta]
-  (let [[before [recipient & [donor & after]]] (split-at n weights)]
-    (into (empty weights)
-          (concat before
-                  [(max 0 (+ recipient delta))
-                   (max 0 (- donor delta))]
-                  after))))
+  (let [n-1 (dec n)]
+    (assoc weights
+      n-1 (max 0 (+ (get weights n-1) delta))
+      n (max 0 (- (get weights n) delta)))))
 
 ;; TODO: less clunky css for separator (thin oval gradient?)
 ;; TODO: check that (count weights) matches (count vs) - in spec?
@@ -56,38 +50,43 @@
   The `vs` will typically be various functionally related recap components."
   [{:keys [vs weights]
     :as   state}]
-  (r/with-let [state (state/prepare ::state/vs+weights state)]
+  (r/with-let [state        (state/prepare ::state/vs+weights state)
+               resize-state (r/atom nil)]
     (let [{:keys [vs weights]
            :or   {weights (mapv (constantly 1) (range (count vs)))}} @state
-          key-prefix  (hash vs)
-          columns     (->> weights
-                           (map #(str "minmax(min-content, " % "fr)"))
-                           (interpose "var(--grid-8)")
-                           (str/join " "))
-          resize-fn   (fn [n]
-                        (fn [e]
-                          (let [elements (.. e -target -parentNode -children)
-                                widths   (vec (for [elem (take-nth 2 elements)]
-                                                (.-offsetWidth elem)))]
-                            (reset! resizing {:widths widths
-                                              :n      (dec n)
-                                              :x      (.-clientX e)}))))
-          resize-move (fn [e]
-                        (when-let [{:keys [widths n x]} @resizing]
-                          (let [x'       (.-clientX e)
-                                delta    (- x' x)
-                                weights' (redistribute widths n delta)]
-                            (swap! state assoc :weights weights'))))
-          resize-end  #(reset! resizing nil)]
+          resizing     @resize-state
+          key-prefix   (hash vs)
+          columns      (->> weights
+                            (map #(str "minmax(min-content, " % "fr)"))
+                            (interpose "var(--grid-8)")
+                            (str/join " "))
+          resize-begin (fn [n]
+                         (fn [e]
+                           (let [elements (.. e -target -parentNode -children)
+                                 widths   (for [elem (take-nth 2 elements)]
+                                            (.-offsetWidth elem))]
+                             (reset! resize-state {:widths (vec widths)
+                                                   :n      n
+                                                   :x      (.-clientX e)}))))
+          resize-move  (fn [e]
+                         (when-let [{:keys [widths n x]} @resize-state]
+                           (let [x'       (.-clientX e)
+                                 delta    (- x' x)
+                                 weights' (redistribute widths n delta)]
+                             (swap! state assoc :weights weights'))))
+          resize-end   #(reset! resize-state nil)]
       [:div.combination {:on-mouse-move  resize-move
                          :on-mouse-up    resize-end
                          :on-mouse-leave resize-end
-                         :style          {:display               "grid"
-                                          :grid-template-columns columns}}
+                         :class          (when resizing
+                                           "combination--resize")
+                         :style          {:grid-template-columns columns}}
        (for [[n v] (map-indexed vector vs)
              :let [key (str key-prefix "-" (hash v) "-" n)]]
          [:<> {:key key}
           (when (> n 0)
             [:div.combination__separator
-             {:on-mouse-down (resize-fn n)}])
+             {:class         (when (= n (:n resizing))
+                               "combination__separator--resize")
+              :on-mouse-down (resize-begin n)}])
           [:div v]])])))

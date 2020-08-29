@@ -1,8 +1,18 @@
+.combination {
+    display: grid;
+}
+
+.combination--resize {
+    user-select: none;
+    cursor: col-resize;
+}
+
 .combination__separator {
     transition: var(--transition);
 }
 
-.combination__separator:hover {
+.combination__separator:hover,
+.combination__separator--resize {
     background: #EFEFEF;
     cursor: col-resize;
 }
