@@ -34,12 +34,11 @@
 
 (defn- redistribute
   "Redistribute `weights` such that the `delta` is subtracted from the weight at
-  index `n` and added to the weight at index n-1."
-  [weights n delta]
-  (let [n-1 (dec n)]
-    (assoc weights
-      n-1 (max 0 (+ (get weights n-1) delta))
-      n (max 0 (- (get weights n) delta)))))
+  index `n` and added to the weight at index `m`."
+  [weights m n delta]
+  (assoc weights
+    m (max 0 (+ (get weights m) delta))
+    n (max 0 (- (get weights n) delta))))
 
 ;; TODO: less clunky css for separator (thin oval gradient?)
 ;; TODO: check that (count weights) matches (count vs) - in spec?
@@ -60,19 +59,19 @@
                             (map #(str "minmax(min-content, " % "fr)"))
                             (interpose "var(--grid-8)")
                             (str/join " "))
-          resize-begin (fn [n]
+          resize-begin (fn [m n]
                          (fn [e]
                            (let [elements (.. e -target -parentNode -children)
                                  widths   (for [elem (take-nth 2 elements)]
                                             (.-offsetWidth elem))]
                              (reset! resize-state {:widths (vec widths)
+                                                   :m      m
                                                    :n      n
                                                    :x      (.-clientX e)}))))
           resize-move  (fn [e]
-                         (when-let [{:keys [widths n x]} @resize-state]
+                         (when-let [{:keys [widths m n x]} @resize-state]
                            (let [x'       (.-clientX e)
-                                 delta    (- x' x)
-                                 weights' (redistribute widths n delta)]
+                                 weights' (redistribute widths m n (- x' x))]
                              (swap! state assoc :weights weights'))))
           resize-end   #(reset! resize-state nil)]
       [:div.combination {:on-mouse-move  resize-move
@@ -88,5 +87,5 @@
             [:div.combination__separator
              {:class         (when (= n (:n resizing))
                                "combination__separator--resize")
-              :on-mouse-down (resize-begin n)}])
+              :on-mouse-down (resize-begin (dec n) n)}])
           [:div v]])])))
