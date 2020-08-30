@@ -3,6 +3,7 @@
     min-height: 12px;
     justify-content: center;
     align-items: center;
+    margin-left: var(--grid-8);
 }
 
 .slide-picker__dot {

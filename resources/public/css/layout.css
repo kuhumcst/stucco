@@ -13,6 +13,7 @@
 
 .combination__separator:hover,
 .combination__separator--resize {
-    background: #EFEFEF;
+    background: #F0F0F0;
+    border-radius: var(--grid-4);
     cursor: col-resize;
 }
