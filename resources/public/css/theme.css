@@ -5,6 +5,7 @@
     --border-color: #888;
     --border-radius: 2px;
     --border-width: 1px;
+    --box-shadow: 0 0 4px 0 rgba(0,0,0,0.4);
     --color: #222;
     --filter: brightness(1);
     --font-size: 14px;
@@ -30,6 +31,7 @@
 
     /* Variations. */
     --border-very-subtle: 1px solid #DDD;
+    --box-shadow-hidden: 0 0 0 0 rgba(0,0,0,0);
     --color-subtle: #AAA;
     --color-very-subtle: #DDD;
     --font-family-heading: Futura, sans-serif;

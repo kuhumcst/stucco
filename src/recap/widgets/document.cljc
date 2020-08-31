@@ -12,16 +12,15 @@
 (defn illustration
   [{:keys [src alt] :as attr}]
   (assert-alt attr)
-  (r/with-let [fullscreen (r/atom false)
-               toggle     #(swap! fullscreen not)]
+  (r/with-let [fullscreen (r/atom false)]
     (let [fullscreen? @fullscreen]
-      [:div.illustration {:class (when fullscreen?
-                                   "illustration--fullscreen")}
+      [:div.illustration (when fullscreen?
+                           {:class    "illustration--fullscreen"
+                            :on-click #(reset! fullscreen false)})
        [:div.illustration__backdrop]
        [:img {:src      src
               :alt      alt
-              :on-click toggle}]
+              :on-click #(reset! fullscreen true)}]
        (when fullscreen?
-         [:img {:src      src
-                :alt      alt
-                :on-click toggle}])])))
+         [:img {:src src
+                :alt alt}])])))

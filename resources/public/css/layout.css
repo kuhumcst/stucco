@@ -38,15 +38,21 @@
 
 /* The actual image */
 .illustration > img:first-of-type {
+    transition: box-shadow 0.2s;
     width: 100%;
     cursor: zoom-in;
+    box-shadow: var(--box-shadow-hidden);
+}
+
+.illustration > img:first-of-type:hover {
+    box-shadow: var(--box-shadow);
 }
 
 @keyframes fade-in {
     0% {
         opacity: 0;
-        max-width: 50vw;
-        max-height: 50vh;
+        max-width: calc(75vw - var(--grid-32));
+        max-height: calc(75vh - var(--grid-32));
     }
     100% {
         opacity: 1;
