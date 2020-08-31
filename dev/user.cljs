@@ -5,6 +5,7 @@
             [reagent.ratom :as ratom]
             [recap.layout.core :as layout]
             [recap.layout.landmarks :as landmarks]
+            [recap.widgets.document :as doc]
             [recap.widgets.lens :as lens]
             [recap.widgets.carousel :refer [carousel]]
             [recap.widgets.tabs :refer [tabs] :as tabs]))
@@ -105,12 +106,16 @@
   (r/atom nil))
 
 (defonce combination-atom
-  (r/atom {:vs [[carousel (r/atom {:i   2
-                                   :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
-                [carousel (r/atom {:i   2
-                                   :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
-                [tabs tabs-ratom {:id "ratom"}]]
-           :weights [1 1 2]}))
+  (r/atom {:vs      [[carousel (r/atom {:i   0
+                                        :kvs [[1 [doc/illustration {:src "img/handwriting.jpg"
+                                                                    :alt "Illegible handwriting"}]]
+                                              [2 "a"]
+                                              [3 "ratom"]]})]
+                     #_[carousel (r/atom {:i   2
+                                          :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
+                     [tabs tabs-ratom {:id "ratom"}]]
+           :weights [1 2]}))
+
 
 (defn app
   []

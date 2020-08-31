@@ -17,3 +17,60 @@
     border-radius: var(--grid-4);
     cursor: col-resize;
 }
+
+.illustration__backdrop {
+    transition: opacity 0.2s;
+    position: fixed;
+    pointer-events: none; /* Enable click-through. */
+    background: rgba(0,0,0,0.9);
+    opacity: 0;
+    z-index: 998;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.illustration--fullscreen > .illustration__backdrop {
+    pointer-events: auto; /* Disable click-through. */
+    opacity: 1;
+}
+
+/* The actual image */
+.illustration > img:first-of-type {
+    width: 100%;
+    cursor: zoom-in;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        max-width: 50vw;
+        max-height: 50vh;
+    }
+    100% {
+        opacity: 1;
+        max-width: calc(100vw - var(--grid-32));
+        max-height: calc(100vh - var(--grid-32));
+    }
+}
+
+/* The full-screen representation. */
+.illustration--fullscreen > img:not(:first-of-type) {
+    animation: fade-in 0.2s;
+    display: block;
+    position: fixed;
+    z-index: 999;
+    cursor: zoom-out;
+
+    /* Proportional scale full-screen representation. Minimum 16px margin. */
+    max-width: calc(100vw - var(--grid-32));
+    max-height: calc(100vh - var(--grid-32));
+    width: auto;
+    height: auto;
+
+    /* Vertical centering. */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
