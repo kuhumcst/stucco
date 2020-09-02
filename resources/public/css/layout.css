@@ -4,6 +4,7 @@
 
 .combination--resize {
     user-select: none;
+    -webkit-user-select: none; /* Safari support. */
     cursor: col-resize;
 }
 
