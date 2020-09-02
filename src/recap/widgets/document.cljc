@@ -18,9 +18,6 @@
                            {:class    "illustration--fullscreen"
                             :on-click #(reset! fullscreen false)})
        [:div.illustration__backdrop]
-       [:img {:src      src
-              :alt      alt
-              :on-click #(reset! fullscreen true)}]
+       [:img (merge attr {:on-click #(reset! fullscreen true)})]
        (when fullscreen?
-         [:img {:src src
-                :alt alt}])])))
+         [:img attr])])))
