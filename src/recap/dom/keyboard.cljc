@@ -4,8 +4,7 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#keyboard"
   (:require [clojure.set :as set]
-            [recap.dom.focus :as focus]
-            [recap.dom.key :as key]))
+            [recap.dom.focus :as focus]))
 
 ;; https://javascript.info/bubbling-and-capturing
 ;; https://www.mutuallyhuman.com/blog/keydown-is-the-only-keyboard-event-we-need/
@@ -29,14 +28,33 @@
       after (recur before (conj after sibling) siblings)
       before (recur (conj before sibling) after siblings))))
 
+;; https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+(def spacebar
+  #{" " "Spacebar"})
+
+(def enter
+  #{"Enter"})
+
+(def up
+  #{"ArrowUp" "Up"})
+
+(def down
+  #{"ArrowDown" "Down"})
+
+(def left
+  #{"ArrowLeft" "Left"})
+
+(def right
+  #{"ArrowRight" "Right"})
+
 (def prev-item
-  (set/union key/up key/left))
+  (set/union up left))
 
 (def next-item
-  (set/union key/down key/right))
+  (set/union down right))
 
 (def click-item
-  (set/union key/spacebar key/enter))
+  (set/union spacebar enter))
 
 (def supported-keys
   (set/union prev-item next-item click-item))

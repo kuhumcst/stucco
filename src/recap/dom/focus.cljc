@@ -1,5 +1,5 @@
 (ns recap.dom.focus
-  "Global DOM manipulation.")
+  "Reactive focus manipulation.")
 
 (def ^:dynamic *requested-focus*
   nil)

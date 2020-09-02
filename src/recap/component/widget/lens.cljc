@@ -1,4 +1,4 @@
-(ns recap.widgets.lens
+(ns recap.component.widget.lens
   "Reagent components for inspecting generic data."
   (:require [clojure.string :as str]
             [clojure.walk :as walk]

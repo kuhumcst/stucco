@@ -3,12 +3,11 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [recap.layout.core :as layout]
-            [recap.layout.landmarks :as landmarks]
-            [recap.widgets.document :as doc]
-            [recap.widgets.lens :as lens]
-            [recap.widgets.carousel :refer [carousel]]
-            [recap.widgets.tabs :refer [tabs] :as tabs]))
+            [recap.component.layout :as layout]
+            [recap.component.document :as doc]
+            [recap.component.widget.lens :as lens]
+            [recap.component.widget.carousel :refer [carousel]]
+            [recap.component.widget.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -89,17 +88,17 @@
            :i   1}))
 
 (def landmarks
-  {:banner        [landmarks/banner
-                   [landmarks/search {:aria-label "ib"}
+  {:banner        [layout/banner
+                   [layout/search {:aria-label "ib"}
                     "banner > search"]]
-   :complementary [landmarks/complementary {:aria-label "john"}
-                   [landmarks/form {:aria-label "karsten"}
+   :complementary [layout/complementary {:aria-label "john"}
+                   [layout/form {:aria-label "karsten"}
                     "complementary > form"]]
-   :content-info  [landmarks/content-info
-                   [landmarks/region {:aria-label "palle"}
+   :content-info  [layout/content-info
+                   [layout/region {:aria-label "palle"}
                     "contentinfo > region"]]
-   :main          [landmarks/main
-                   [landmarks/navigation {:aria-label "ludvig"}
+   :main          [layout/main
+                   [layout/navigation {:aria-label "ludvig"}
                     "main > navigation"]]})
 
 (defonce code-lens-state

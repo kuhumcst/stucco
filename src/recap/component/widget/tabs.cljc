@@ -1,7 +1,7 @@
-(ns recap.widgets.tabs
+(ns recap.component.widget.tabs
   "Reagent components for creating a tabbed UI.
 
-  Shared state for tab components:
+  State description:
     :kvs - key-value pairs of tab labels and bodies.
     :i   - (optional) the index of the currently selected tab.
 
@@ -13,12 +13,11 @@
   (:require [recap.dom.focus :as focus]
             [recap.dom.drag :as drag]
             [recap.dom.keyboard :as kbd]
-            [recap.state :as state]
-            [recap.util :as util]))
+            [recap.state :as state]))
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]
-  {:kvs (util/vec-dissoc kvs n)
+  {:kvs (state/vec-dissoc kvs n)
    :i   (cond
           (= n i) (min i (- (count kvs) 2))                 ; go right
           (< n i) (dec i)                                   ; go left
@@ -26,7 +25,7 @@
 
 (defn- mk-drop-state
   [{:keys [kvs i] :or {i 0}} n kv]
-  {:kvs (util/vec-assoc kvs n kv)
+  {:kvs (state/vec-assoc kvs n kv)
    :i   (cond
           (:selected? (meta kv)) n                          ; go to dropped kv
           (= n i) (inc i)                                   ; go right

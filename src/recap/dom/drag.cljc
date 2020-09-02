@@ -3,7 +3,7 @@
 
   All successful drops execute the code `(drop-fn (drag-fn))` in order
   to effectuate the necessary state changes."
-  (:require [recap.dom.interop :as interop]))
+  (:require [recap.dom.bem :as bem]))
 
 ;; TODO: safari does not display drag image, fix!
 
@@ -41,16 +41,16 @@
       ;; triggering :hover on the element to the right.
       (js/setTimeout
         (fn []
-          (interop/add-modifier! (.-parentNode element) "drag-parent")
-          (interop/add-modifier! element "drag"))
+          (bem/add-modifier! (.-parentNode element) "drag-parent")
+          (bem/add-modifier! element "drag"))
         100))))
 
 ;; TODO: does not fire when the drag is internal - fix!
 (defn on-drag-end
   []
   (fn [e]
-    (interop/remove-modifier! (.-parentNode (.-target e)) "drag-parent")
-    (interop/remove-modifier! (.-target e) "drag")))
+    (bem/remove-modifier! (.-parentNode (.-target e)) "drag-parent")
+    (bem/remove-modifier! (.-target e) "drag")))
 
 ;; The onDragOver handler is needed for drag-and-drop to work.
 (defn on-drag-over
@@ -63,13 +63,13 @@
   []
   (fn [e]
     (.preventDefault e)
-    (interop/add-modifier! (.-target e) "drag-over")))
+    (bem/add-modifier! (.-target e) "drag-over")))
 
 (defn on-drag-leave
   []
   (fn [e]
     (.preventDefault e)
-    (interop/remove-modifier! (.-target e) "drag-over")))
+    (bem/remove-modifier! (.-target e) "drag-over")))
 
 (defn on-drop
   "The `drop-fn` is called with the drag-fn's output as its input on a
@@ -77,7 +77,7 @@
   [drop-fn]
   (fn [e]
     (.preventDefault e)
-    (interop/remove-modifier! (.-target e) "drag-over")
+    (bem/remove-modifier! (.-target e) "drag-over")
     (let [drag-id (.getData (.-dataTransfer e) "fn")
           {:keys [drag-fn ghost]} (get @drag-fns drag-id)]
       (when drag-fn

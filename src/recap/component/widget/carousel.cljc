@@ -1,7 +1,7 @@
-(ns recap.widgets.carousel
+(ns recap.component.widget.carousel
   "Reagent components for displaying slides in a carousel.
 
-  Shared state for tab components:
+  State description:
     :kvs  - key-values pairs of slide labels and bodies.
     :i    - (optional) the index of the currently selected slide.
 

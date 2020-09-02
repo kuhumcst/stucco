@@ -41,6 +41,17 @@
   (s/keys :req-un [::vs]
           :opt-un [::weights]))
 
+(defn vec-dissoc
+  [coll n]
+  (vec (concat (subvec coll 0 n)
+               (subvec coll (inc n)))))
+
+(defn vec-assoc
+  [coll n v]
+  (let [[before after] (split-at n coll)]
+    (vec (concat before [v] after))))
+
+;; TODO: remove entirely if this remains unused
 ;; Important global DOM state is held in this singleton state atom. Components
 ;; can react directly to window content changes by deref'ing the atom or a
 ;; cursor into it. For instance, certain components may need to react to window
