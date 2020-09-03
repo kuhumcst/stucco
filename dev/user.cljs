@@ -35,26 +35,30 @@
 ;; reference to an atom! Otherwise the state will not be preserved between tab
 ;; changes, i.e. the index of a carousel will get reset every time the tab is
 ;; repainted. Providing atom - inlined or external - preserves the state.
+
+(defonce fascimile-text
+  (r/atom {:i   0
+           :kvs [["Side 1" "testing"]
+                 ["Side 2" "a"]
+                 ["Side 3" "ratom"]]}))
+
 (def tabs-big
-  [["First" ^{:key (random-uuid)} [carousel (r/atom {:i   0
-                                                     :kvs [["Side 1" "testing"]
-                                                           ["Side 2" "a"]
-                                                           ["Side 3" "ratom"]]})
+  [["First" ^{:key (random-uuid)} [carousel fascimile-text
                                    {:aria-label "Test"}]]
    ["Second" ^{:key (random-uuid)} [carousel {:i   0
                                               :kvs [[1 1]]}]]
    ["Third" [:<>
              [:h1 "More lorem ipsum"]
              [:p lorem-ipsum-1]]]
-   ["Fourth" [:<>
-              [:h1 "Even more lorem ipsum!!!"]
-              [:p lorem-ipsum-2]]]
-   ["Fifth" [:<>
-             [:h1 "Even more lorem ipsum!!!"]
-             [:p lorem-ipsum-2]]]
-   ["Sixth" [:<>
-             [:h1 "Even more lorem ipsum!!!"]
-             [:p lorem-ipsum-2]]]])
+   #_["Fourth" [:<>
+                [:h1 "Even more lorem ipsum!!!"]
+                [:p lorem-ipsum-2]]]
+   #_["Fifth" [:<>
+               [:h1 "Even more lorem ipsum!!!"]
+               [:p lorem-ipsum-2]]]
+   #_["Sixth" [:<>
+               [:h1 "Even more lorem ipsum!!!"]
+               [:p lorem-ipsum-2]]]])
 
 (def tabs-small
   [["1" "One"]
@@ -104,22 +108,32 @@
 (defonce code-lens-state
   (r/atom nil))
 
-(defonce combination-atom
-  (r/atom {:vs      [[carousel (r/atom {:i   0
-                                        :kvs [[1 [doc/illustration {:src "img/handwriting.jpg"
-                                                                    :alt "Illegible handwriting"}]]
-                                              [2 "a"]
-                                              [3 "ratom"]]})]
-                     #_[carousel (r/atom {:i   2
-                                          :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
-                     [tabs tabs-ratom {:id "ratom"}]]
-           :weights [1 2]}))
+(def facs
+  (cycle [[doc/illustration {:src "img/handwriting.jpg"
+                             :alt "Illegible handwriting"}]
+          [doc/illustration {:src   "img/handwriting.jpg"
+                             :alt   "Illegible handwriting"
+                             :style {:filter "invert(100%)"}}]
+          [doc/illustration {:src   "img/handwriting.jpg"
+                             :alt   "Illegible handwriting"
+                             :style {:filter "sepia(100%)"}}]]))
 
+;; TODO: what about drag-and-drop of state when mutation is restricted??
+;; Re-frame subscription-like reaction that only updates on the :i key and
+;; intercepts the :kvs value before rendering.
+(def facsimile-img
+  (ratom/make-reaction #(update (deref fascimile-text)
+                                :kvs (fn [kvs]
+                                       (map vector (map first kvs) facs)))
+                       :on-set (fn [_ {:keys [i]}]
+                                 (swap! fascimile-text assoc :i i))))
 
 (defn app
   []
   [:<>
-   [layout/combination combination-atom]
+   [layout/combination {:vs      [[carousel facsimile-img]
+                                  [tabs tabs-ratom {:id "ratom"}]]
+                        :weights [1 1]}]
    [lens/code code-lens-state]
    [carousel {:i   0
               :kvs [[1 [:<>
