@@ -53,8 +53,8 @@
 @keyframes fade-in {
     0% {
         opacity: 0;
-        max-width: calc(75vw - var(--grid-32));
-        max-height: calc(75vh - var(--grid-32));
+        max-width: calc(85vw - var(--grid-32));
+        max-height: calc(85vh - var(--grid-32));
     }
     100% {
         opacity: 1;

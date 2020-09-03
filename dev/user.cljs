@@ -67,7 +67,7 @@
    ["4" "Four"]])
 
 (defonce tabs-ratom
-  (r/atom {:kvs (tabs/heterostyled tabs-big)
+  (r/atom {:kvs (tabs/heterostyled tabs-big shuffle)
            :i   0}))
 
 (defonce tabs-ratom-for-cursor
