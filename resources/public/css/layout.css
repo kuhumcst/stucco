@@ -34,6 +34,7 @@
 
 .illustration--fullscreen > .illustration__backdrop {
     pointer-events: auto; /* Disable click-through. */
+    cursor: zoom-out;
     opacity: 1;
 }
 
@@ -68,7 +69,7 @@
     display: block;
     position: fixed;
     z-index: 999;
-    cursor: zoom-out;
+    pointer-events: none; /* Enable click-through. */
 
     /* Proportional scale full-screen representation. Minimum 16px margin. */
     max-width: calc(100vw - var(--grid-32));
