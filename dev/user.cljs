@@ -38,9 +38,14 @@
 
 (defonce fascimile-text
   (r/atom {:i   0
-           :kvs [["Side 1" "testing"]
-                 ["Side 2" "a"]
-                 ["Side 3" "ratom"]]}))
+           :kvs [["Side 1" [:<>
+                            [:p lorem-ipsum-1]
+                            [:p lorem-ipsum-2]]]
+                 ["Side 2" [:<>
+                            [:p lorem-ipsum-2]
+                            [:p lorem-ipsum-1]]]
+                 ["Side 3" [:<>
+                            [:p lorem-ipsum-1]]]]}))
 
 (def tabs-big
   [["First" ^{:key (random-uuid)} [carousel fascimile-text

@@ -1,0 +1,64 @@
+
+.illustration__backdrop {
+    transition: opacity 0.2s;
+    position: fixed;
+    pointer-events: none; /* Enable click-through. */
+    background: rgba(0,0,0,0.9);
+    opacity: 0;
+    z-index: 998;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.illustration--fullscreen > .illustration__backdrop {
+    pointer-events: auto; /* Disable click-through. */
+    cursor: zoom-out;
+    opacity: 1;
+}
+
+/* The actual image */
+.illustration > img:first-of-type {
+    transition: box-shadow 0.2s;
+    width: 100%;
+    cursor: zoom-in;
+    box-shadow: var(--box-shadow-hidden);
+}
+
+.illustration > img:first-of-type:hover {
+    box-shadow: var(--box-shadow);
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        max-width: calc(85vw - var(--grid-32));
+        max-height: calc(85vh - var(--grid-32));
+    }
+    100% {
+        opacity: 1;
+        max-width: calc(100vw - var(--grid-32));
+        max-height: calc(100vh - var(--grid-32));
+    }
+}
+
+/* The full-screen representation. */
+.illustration--fullscreen > img:not(:first-of-type) {
+    animation: fade-in 0.2s;
+    display: block;
+    position: fixed;
+    z-index: 999;
+    pointer-events: none; /* Enable click-through. */
+
+    /* Proportional scale full-screen representation. Minimum 16px margin. */
+    max-width: calc(100vw - var(--grid-32));
+    max-height: calc(100vh - var(--grid-32));
+    width: auto;
+    height: auto;
+
+    /* Vertical centering. */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

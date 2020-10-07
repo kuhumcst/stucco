@@ -33,7 +33,7 @@
           key-prefix   (hash vs)
           columns      (->> weights
                             (map #(str "minmax(min-content, " % "fr)"))
-                            (interpose "var(--grid-8)")
+                            (interpose "var(--grid-16)")
                             (str/join " "))
           resize-begin (fn [m n]
                          (fn [e]
