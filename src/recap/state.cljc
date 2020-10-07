@@ -1,7 +1,10 @@
 (ns recap.state
   "Specs describing the shape of all state used in recap components."
   (:require [clojure.spec.alpha :as s]
-            [reagent.core :as r]))
+            [clojure.set :as set]
+            [reagent.ratom :as ratom]
+            [reagent.core :as r])
+  (:refer-clojure :exclude [derive]))
 
 ;;;; GENERIC
 
@@ -78,3 +81,15 @@
   [spec state]
   (doto (normalize state)
     (assert-valid spec)))
+
+;; TODO: what about drag-and-drop of state when mutation is restricted??
+(defn derive
+  "Derive a reactive map from an existing `state` map and any changes in `m`.
+  Unchanged keys are synchronized between the original and derived state maps."
+  [state m]
+  (let [shared-ks (set/difference (set (keys @state))
+                                  (set (keys m)))]
+    (ratom/make-reaction #(merge @state m)
+                         :on-set (fn [_ m]
+                                   (let [m* (select-keys m shared-ks)]
+                                     (swap! state merge m*))))))

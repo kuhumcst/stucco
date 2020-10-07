@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
+            [recap.state :as state]
             [recap.component.layout :as layout]
             [recap.component.document :as doc]
             [recap.component.widget.lens :as lens]
@@ -123,15 +124,11 @@
                              :alt   "Illegible handwriting"
                              :style {:filter "sepia(100%)"}}]]))
 
-;; TODO: what about drag-and-drop of state when mutation is restricted??
 ;; Re-frame subscription-like reaction that only updates on the :i key and
 ;; intercepts the :kvs value before rendering.
 (def facsimile-img
-  (ratom/make-reaction #(update (deref fascimile-text)
-                                :kvs (fn [kvs]
-                                       (map vector (map first kvs) facs)))
-                       :on-set (fn [_ {:keys [i]}]
-                                 (swap! fascimile-text assoc :i i))))
+  (let [ks (map first (:kvs @fascimile-text))]
+    (state/derive fascimile-text {:kvs (map vector ks facs)})))
 
 (defn app
   []
