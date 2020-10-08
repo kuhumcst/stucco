@@ -77,6 +77,7 @@
     transition: all 0s;
 }
 
+/* TODO: doesn't seem relevant any longer, remove? */
 /* Fixes issue with border... somehow! */
 .tab:first-child:last-child.tab--drag {
     border: none;
