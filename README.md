@@ -1,22 +1,23 @@
 Stucco
 ======
-The Stucco<sup>[†](#note-name)</sup> library is an effort to foster [rapid application development](https://en.wikipedia.org/wiki/Rapid_application_development) through a collection of accessible,  adaptive [reagent](https://github.com/reagent-project/reagent) user interface components.
+The Stucco<sup>[†](#note-name)</sup> project is an ongoing experiment in creating adaptive user interfaces on top of a generic Clojure data model. The library contains a collection of accessible [reagent](https://github.com/reagent-project/reagent) components that together constitute a toolkit for doing rapid application development in the browser.
 
-The library is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [glossematics](https://github.com/kuhumcst/glossematics) archival website as part of the _"Infrastrukturalisme"_ project, a joint effort between the University of Copenhagen and Aarhus University.
-
-> <a name="note-name"><sup>†</sup></a> Stucco is a [construction material](https://en.wikipedia.org/wiki/Stucco) made of reagent components. It is used as a decorative coating for Clojure data and allows end users to participate in sculpturing the user interface.
+> <a name="note-name"><sup>†</sup></a> A [construction material](https://en.wikipedia.org/wiki/Stucco) used as a decorative coating for Clojure data, allowing end users to participate in sculpturing the user interface.
 
 Overview
 --------
+The library is still very much in the [hammock stage](https://www.youtube.com/watch?v=f84n5oFoZBc), so the API is definitely not stable. That is not to say that the software is particularly buggy, just that the names and the general organisation of the code may vary greatly between versions. It is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [glossematics](https://github.com/kuhumcst/glossematics) archival website as part of the _"Infrastrukturalisme"_ project, a joint effort between the University of Copenhagen and Aarhus University.
+
+### Components
 <a href="https://youtu.be/ibiK8sgwvqc"><img align="right" width="60%" src="doc/carousel-and-tabs.png"></a>
 
-This is an ongoing experiment in user interface adaptability using just reagent components and a simple underlying data model. There are three separate component types to consider:
+Stucco components can be divided into three separate types, each given their own namespace:
 
 * `dk.cst.stucco.surface`: Surface components are comparable to typical reusable components found in libraries such as [re-com](https://github.com/day8/re-com). The primary purpose of a Surface component is to provide a basic level of interactivity expected for simple pieces of data. An example might be the `illustration` component which can be used in place of the HTML `[:img]` element.
 * `dk.cst.stucco.plastic`: Plastic components are more complex than Surface components and reflect the mutability of their underlying state. In practice, this mutability is realised as universal drag-and-drop between Plastic components with compatible data. An example might be the `tabs` or `carousel` components which both visualise a collection of key-value pairs according to an index.
 * `dk.cst.stucco.foundation`: Foundation components are used to realise a user interface declaratively. Rather than specifying their precise locations, Stucco components are partitioned semantically into Foundation sections. These sections are then positioned on the web page according to an archetypical layout. Like the Plastic components, this layout can also be changed by the end user, but at a higher level of abstraction.
 
-The components help construct a user interface that can adapt to various end user requirements without resulting in configurations that are too strange. When combined, Stucco components also compose into highly accessible web applications. Please see the document detailing the overall [vision](doc/vision.md) for more.
+The components allow you to construct a user interface that can adapt to various end user requirements without resulting in configurations that are too strange. When combined, Stucco components also compose into highly accessible web applications. Please see the document detailing the overall [vision](doc/vision.md) for more.
 
 Development prerequisites
 -------------------------
