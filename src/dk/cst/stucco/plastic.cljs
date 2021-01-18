@@ -3,7 +3,7 @@
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]
             [reagent.core :as r]
-            [dk.cst.stucco.state :as state]
+            [dk.cst.stucco.helpers.state :as state]
             [dk.cst.stucco.dom.keyboard :as kbd]
             [dk.cst.stucco.dom.focus :as focus]
             [dk.cst.stucco.dom.drag :as drag]))
@@ -39,7 +39,7 @@
 ;; TODO: what to do when drag-and-dropping from tabs using same state?
 ;; Currently, the two tabs components have their tabs reordered, but should
 ;; they duplicate the affected tab instead?
-(defn tab-list
+(defn- tab-list
   "The tabs available in the `state`."
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]
@@ -94,7 +94,7 @@
                    :on-drop       (drag/on-drop insert)}
         k])]))
 
-(defn tab-panel
+(defn- tab-panel
   "The currently selected tab-panel of the `state`."
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]

@@ -3,7 +3,7 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [dk.cst.stucco.state :as state]
+            [dk.cst.stucco.helpers.state :as state]
             [dk.cst.stucco.foundation :as foundation]
             [dk.cst.stucco.surface :as doc]
             [dk.cst.stucco.plastic :refer [carousel tabs] :as plastic]))
