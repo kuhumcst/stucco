@@ -6,7 +6,7 @@
             [dk.cst.stucco.helpers.state :as state]
             [dk.cst.stucco.foundation :as foundation]
             [dk.cst.stucco.surface :as doc]
-            [dk.cst.stucco.plastic :refer [carousel tabs] :as plastic]))
+            [dk.cst.stucco.plastic :as plastic]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -47,10 +47,10 @@
                             [:p lorem-ipsum-1]]]]}))
 
 (def tabs-big
-  [["First" ^{:key (random-uuid)} [carousel fascimile-text
+  [["First" ^{:key (random-uuid)} [plastic/carousel fascimile-text
                                    {:aria-label "Test"}]]
-   ["Second" ^{:key (random-uuid)} [carousel {:i   0
-                                              :kvs [[1 1]]}]]
+   ["Second" ^{:key (random-uuid)} [plastic/carousel {:i   0
+                                                      :kvs [[1 1]]}]]
    ["Third" [:<>
              [:h1 "More lorem ipsum"]
              [:p lorem-ipsum-1]]]
@@ -131,19 +131,19 @@
 (defn app
   []
   [:<>
-   [foundation/combination {:vs  [[carousel facsimile-img]
-                                  [tabs tabs-ratom {:id "ratom"}]]
+   [foundation/combination {:vs  [[plastic/carousel facsimile-img]
+                                  [plastic/tabs tabs-ratom {:id "ratom"}]]
                             :weights [1 1]}]
    [plastic/code code-lens-state]
-   [carousel {:i   0
-              :kvs [[1 [:<>
-                        [:p lorem-ipsum-1]
-                        [:p lorem-ipsum-2]]]
-                    [2 lorem-ipsum-1]
-                    [3 lorem-ipsum-2]]}]
+   [plastic/carousel {:i   0
+                      :kvs [[1 [:<>
+                                [:p lorem-ipsum-1]
+                                [:p lorem-ipsum-2]]]
+                            [2 lorem-ipsum-1]
+                            [3 lorem-ipsum-2]]}]
    [:br]
-   [carousel (r/atom {:i   2
-                      :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
+   [plastic/carousel (r/atom {:i   2
+                              :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
    [:br]
 
    #_[foundation/root landmarks]
@@ -156,22 +156,22 @@
    #_[:pre
       "cursor: " (with-out-str (pprint @tabs-cursor))
       "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [tabs tabs-cursor {:id "cursor"}]
+   [plastic/tabs tabs-cursor {:id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
    #_[:pre
       "reaction ratom: " (with-out-str (pprint @tabs-reaction))
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [tabs tabs-reaction {:id "reaction"}]
+   [plastic/tabs tabs-reaction {:id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
    #_[:pre
       "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
-   [tabs (r/wrap @tabs-ratom-for-wrapper
-                 reset! tabs-ratom-for-wrapper)
+   [plastic/tabs (r/wrap @tabs-ratom-for-wrapper
+                         reset! tabs-ratom-for-wrapper)
     {:id "wrapper"}]
    [:br]])
 
