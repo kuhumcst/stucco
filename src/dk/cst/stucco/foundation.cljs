@@ -1,4 +1,4 @@
-(ns dk.cst.stucco.layout
+(ns dk.cst.stucco.foundation
   "Reagent components to compose page layouts from top-level Landmark Regions
   and custom sub-level groupings (e.g. combination).
 

@@ -54,6 +54,23 @@
   (let [[before after] (split-at n coll)]
     (vec (concat before [v] after))))
 
+(defn- mk-drag-state
+  [{:keys [kvs i] :or {i 0}} n]
+  {:kvs (vec-dissoc kvs n)
+   :i   (cond
+          (= n i) (min i (- (count kvs) 2))                 ; go right
+          (< n i) (dec i)                                   ; go left
+          (> n i) i)})                                      ; stay in place
+
+(defn- mk-drop-state
+  [{:keys [kvs i] :or {i 0}} n kv]
+  {:kvs (vec-assoc kvs n kv)
+   :i   (cond
+          (:selected? (meta kv)) n                          ; go to dropped kv
+          (= n i) (inc i)                                   ; go right
+          (< n i) (inc i)                                   ; go right
+          (> n i) (max 0 i))})                              ; stay in place
+
 ;; TODO: remove entirely if this remains unused
 ;; Important global DOM state is held in this singleton state atom. Components
 ;; can react directly to window content changes by deref'ing the atom or a

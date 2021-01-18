@@ -3,6 +3,7 @@
   (:require [shadow.resource :as resource]
             [clojure.string :as str]))
 
+;; TODO: reorganise CSS to match layout, plastic, surface namespaces
 (def resources
   {:carousel (resource/inline "public/css/carousel.css")
    :lens     (resource/inline "public/css/lens.css")

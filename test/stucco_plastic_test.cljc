@@ -1,6 +1,6 @@
-(ns stucco-tabs-test
+(ns stucco-plastic-test
   (:require [clojure.test :refer [deftest testing is]]
-            [dk.cst.stucco.tabs :as tabs]))
+            [dk.cst.stucco.plastic :as plastic]))
 
 (def kvs-1
   [[:a :a]
@@ -10,6 +10,6 @@
 ;; TODO: still need to make these tests, saving for later
 #_(deftest mk-drag-state
     (testing "internal"
-      (let [actual   (tabs/mk-drag-state {:i 0})
+      (let [actual   (plastic/mk-drag-state {:i 0})
             expected nil]
         (is (= actual expected)))))

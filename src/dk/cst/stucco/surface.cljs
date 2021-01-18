@@ -1,4 +1,4 @@
-(ns dk.cst.stucco.document
+(ns dk.cst.stucco.surface
   "Mostly dumb components meant to replace common HTML elements.
 
   Unlike the more complex widget components, the document components do not take

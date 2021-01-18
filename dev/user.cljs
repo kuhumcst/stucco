@@ -4,11 +4,9 @@
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
             [dk.cst.stucco.state :as state]
-            [dk.cst.stucco.layout :as layout]
-            [dk.cst.stucco.document :as doc]
-            [dk.cst.stucco.lens :as lens]
-            [dk.cst.stucco.carousel :refer [carousel]]
-            [dk.cst.stucco.tabs :refer [tabs] :as tabs]))
+            [dk.cst.stucco.foundation :as foundation]
+            [dk.cst.stucco.surface :as doc]
+            [dk.cst.stucco.plastic :refer [carousel tabs] :as plastic]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -73,7 +71,7 @@
    ["4" "Four"]])
 
 (defonce tabs-ratom
-  (r/atom {:kvs (tabs/heterostyled tabs-big shuffle)
+  (r/atom {:kvs (plastic/heterostyled tabs-big shuffle)
            :i   0}))
 
 (defonce tabs-ratom-for-cursor
@@ -98,17 +96,17 @@
            :i   1}))
 
 (def landmarks
-  {:banner        [layout/banner
-                   [layout/search {:aria-label "ib"}
+  {:banner        [foundation/banner
+                   [foundation/search {:aria-label "ib"}
                     "banner > search"]]
-   :complementary [layout/complementary {:aria-label "john"}
-                   [layout/form {:aria-label "karsten"}
+   :complementary [foundation/complementary {:aria-label "john"}
+                   [foundation/form {:aria-label "karsten"}
                     "complementary > form"]]
-   :content-info  [layout/content-info
-                   [layout/region {:aria-label "palle"}
+   :content-info  [foundation/content-info
+                   [foundation/region {:aria-label "palle"}
                     "contentinfo > region"]]
-   :main          [layout/main
-                   [layout/navigation {:aria-label "ludvig"}
+   :main          [foundation/main
+                   [foundation/navigation {:aria-label "ludvig"}
                     "main > navigation"]]})
 
 (defonce code-lens-state
@@ -133,10 +131,10 @@
 (defn app
   []
   [:<>
-   [layout/combination {:vs      [[carousel facsimile-img]
+   [foundation/combination {:vs  [[carousel facsimile-img]
                                   [tabs tabs-ratom {:id "ratom"}]]
-                        :weights [1 1]}]
-   [lens/code code-lens-state]
+                            :weights [1 1]}]
+   [plastic/code code-lens-state]
    [carousel {:i   0
               :kvs [[1 [:<>
                         [:p lorem-ipsum-1]
@@ -148,7 +146,7 @@
                       :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
    [:br]
 
-   #_[layout/root landmarks]
+   #_[foundation/root landmarks]
 
    ;; Using ratom as state.
    ;[tabs tabs-ratom {:id "ratom"}]
