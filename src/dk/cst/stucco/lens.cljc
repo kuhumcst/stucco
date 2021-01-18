@@ -1,9 +1,9 @@
-(ns recap.component.widget.lens
+(ns dk.cst.stucco.lens
   "Reagent components for inspecting generic data."
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]
-            [recap.dom.drag :as drag]))
+            [dk.cst.stucco.dom.drag :as drag]))
 
 ;; TODO: incorrect for any combination of ns and symbol containing $
 (defn- f->symbol

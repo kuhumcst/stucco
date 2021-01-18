@@ -1,4 +1,4 @@
-(ns recap.component.widget.carousel
+(ns dk.cst.stucco.carousel
   "Reagent components for displaying slides in a carousel.
 
   State description:
@@ -8,8 +8,8 @@
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#carousel"
   (:require [reagent.core :as r]
-            [recap.state :as state]
-            [recap.dom.keyboard :as kbd]))
+            [dk.cst.stucco.state :as state]
+            [dk.cst.stucco.dom.keyboard :as kbd]))
 
 ;; TODO: drag-and-drop
 

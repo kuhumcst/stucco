@@ -1,4 +1,4 @@
-(ns recap.component.document
+(ns dk.cst.stucco.document
   "Mostly dumb components meant to replace common HTML elements.
 
   Unlike the more complex widget components, the document components do not take

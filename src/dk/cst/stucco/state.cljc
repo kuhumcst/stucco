@@ -1,5 +1,5 @@
-(ns recap.state
-  "Specs describing the shape of all state used in recap components."
+(ns dk.cst.stucco.state
+  "Specs describing the shape of all state used in Stucco components."
   (:require [clojure.spec.alpha :as s]
             [clojure.set :as set]
             [reagent.ratom :as ratom]

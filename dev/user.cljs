@@ -3,12 +3,12 @@
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
-            [recap.state :as state]
-            [recap.component.layout :as layout]
-            [recap.component.document :as doc]
-            [recap.component.widget.lens :as lens]
-            [recap.component.widget.carousel :refer [carousel]]
-            [recap.component.widget.tabs :refer [tabs] :as tabs]))
+            [dk.cst.stucco.state :as state]
+            [dk.cst.stucco.layout :as layout]
+            [dk.cst.stucco.document :as doc]
+            [dk.cst.stucco.lens :as lens]
+            [dk.cst.stucco.carousel :refer [carousel]]
+            [dk.cst.stucco.tabs :refer [tabs] :as tabs]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -186,5 +186,5 @@
 
 (defn start-dev
   []
-  (println "Started development environment for kuhumcst/recap.")
+  (println "Started development environment for kuhumcst/stucco.")
   (render))

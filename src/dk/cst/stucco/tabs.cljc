@@ -1,4 +1,4 @@
-(ns recap.component.widget.tabs
+(ns dk.cst.stucco.tabs
   "Reagent components for creating a tabbed UI.
 
   State description:
@@ -10,10 +10,10 @@
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
-  (:require [recap.dom.focus :as focus]
-            [recap.dom.drag :as drag]
-            [recap.dom.keyboard :as kbd]
-            [recap.state :as state]))
+  (:require [dk.cst.stucco.dom.focus :as focus]
+            [dk.cst.stucco.dom.drag :as drag]
+            [dk.cst.stucco.dom.keyboard :as kbd]
+            [dk.cst.stucco.state :as state]))
 
 (defn- mk-drag-state
   [{:keys [kvs i] :or {i 0}} n]

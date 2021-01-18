@@ -1,6 +1,6 @@
-(ns recap.tabs-test
+(ns stucco-tabs-test
   (:require [clojure.test :refer [deftest testing is]]
-            [recap.component.widget.tabs :as tabs]))
+            [dk.cst.stucco.tabs :as tabs]))
 
 (def kvs-1
   [[:a :a]

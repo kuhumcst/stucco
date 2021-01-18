@@ -1,9 +1,9 @@
-(ns recap.dom.drag
+(ns dk.cst.stucco.dom.drag
   "A functional take on drag-and-drop.
 
   All successful drops execute the code `(drop-fn (drag-fn))` in order
   to effectuate the necessary state changes."
-  (:require [recap.dom.bem :as bem]))
+  (:require [dk.cst.stucco.dom.bem :as bem]))
 
 ;; TODO: safari does not display drag image, fix!
 

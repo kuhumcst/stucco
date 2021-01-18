@@ -1,4 +1,4 @@
-(ns recap.component.layout
+(ns dk.cst.stucco.layout
   "Reagent components to compose page layouts from top-level Landmark Regions
   and custom sub-level groupings (e.g. combination).
 
@@ -6,7 +6,7 @@
     https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark"
   (:require [clojure.string :as str]
             [reagent.core :as r]
-            [recap.state :as state]))
+            [dk.cst.stucco.state :as state]))
 
 (defn- redistribute
   "Redistribute `weights` such that the `delta` is subtracted from the weight at
@@ -22,7 +22,7 @@
 (defn combination
   "A combination of `vs`, with the space optionally partitioned by `weights`.
   If no `weights` are specified, each v will initially take up equal size.
-  The `vs` will typically be various functionally related recap components."
+  The `vs` will typically be various functionally related Stucco components."
   [{:keys [vs weights]
     :as   state}]
   (r/with-let [state        (state/prepare ::state/vs+weights state)

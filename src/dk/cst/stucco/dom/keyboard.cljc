@@ -1,10 +1,10 @@
-(ns recap.dom.keyboard
+(ns dk.cst.stucco.dom.keyboard
   "Helpers for ARIA-compliant keyboard navigation.
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#keyboard"
   (:require [clojure.set :as set]
-            [recap.dom.focus :as focus]))
+            [dk.cst.stucco.dom.focus :as focus]))
 
 ;; https://javascript.info/bubbling-and-capturing
 ;; https://www.mutuallyhuman.com/blog/keydown-is-the-only-keyboard-event-we-need/

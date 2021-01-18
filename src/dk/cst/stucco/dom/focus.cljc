@@ -1,4 +1,4 @@
-(ns recap.dom.focus
+(ns dk.cst.stucco.dom.focus
   "Reactive focus manipulation.")
 
 (def ^:dynamic *requested-focus*

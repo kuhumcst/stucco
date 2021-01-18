@@ -1,4 +1,4 @@
-(ns recap.dom.bem
+(ns dk.cst.stucco.dom.bem
   (:require [clojure.string :as str]))
 
 (def bem-block
