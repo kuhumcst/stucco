@@ -6,7 +6,7 @@
     https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark"
   (:require [clojure.string :as str]
             [reagent.core :as r]
-            [dk.cst.stucco.helpers.state :as state]))
+            [dk.cst.stucco.util.state :as state]))
 
 (defn- redistribute
   "Redistribute `weights` such that the `delta` is subtracted from the weight at

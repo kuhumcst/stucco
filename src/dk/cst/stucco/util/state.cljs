@@ -1,4 +1,4 @@
-(ns dk.cst.stucco.helpers.state
+(ns dk.cst.stucco.util.state
   "Specs describing the shape of all state used in Stucco components."
   (:require [clojure.spec.alpha :as s]
             [clojure.set :as set]

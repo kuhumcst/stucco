@@ -1,4 +1,4 @@
-(ns dk.cst.stucco.helpers.css
+(ns dk.cst.stucco.util.css
   "CSS content available programmatically for use in the Shadow DOM."
   (:require [shadow.resource :as resource]
             [clojure.string :as str]))
