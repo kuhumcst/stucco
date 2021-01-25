@@ -14,8 +14,8 @@
   (str parent-id "-" n))
 
 (defn- mk-tab-panel-id
-  [parent-id]
-  (str parent-id "-tabpanel"))
+  [parent-id n]
+  (str parent-id "-tabpanel-" n))
 
 (def background-colours
   ["var(--tab-background-1)"
@@ -45,25 +45,27 @@
    {:keys [id] :as opts}]
   (state/assert-valid state ::state/kvs+i)
   (let [{:keys [kvs i] :or {i 0}} @state
-        length (count kvs)
-        append (fn [kv]
-                 ;; Internal drops will have no increase in tab count, so when
-                 ;; appending inside the same tab-list we must account for it.
-                 (if (= id (:id (meta kv)))
-                   (swap! state state/mk-drop-state (dec length) kv)
-                   (swap! state state/mk-drop-state length kv)))]
+        panel-id (mk-tab-panel-id id i)
+        length   (count kvs)
+        append   (fn [kv]
+                   ;; Internal drops will have no increase in tab count, so when
+                   ;; appending inside the same tab-list we must account for it.
+                   (if (= id (:id (meta kv)))
+                     (swap! state state/mk-drop-state (dec length) kv)
+                     (swap! state state/mk-drop-state length kv)))]
     [:div.tab-list {:role          "tablist"
                     :aria-label    "Choose a tab to display" ;TODO: localisation
                     :id            id
                     :on-key-down   kbd/roving-tabindex-handler
-                    :on-drag-enter (drag/on-drag-enter)
-                    :on-drag-over  (drag/on-drag-over)
-                    :on-drag-leave (drag/on-drag-leave)
+                    :on-drag-enter drag/on-drag-enter
+                    :on-drag-over  drag/on-drag-over
+                    :on-drag-leave drag/on-drag-leave
                     :on-drop       (drag/on-drop append)}
      (for [n (range length)
            :let [[k _ :as kv] (nth kvs n)
                  selected? (= n i)
                  tab-id    (mk-tab-id id n)
+                 source-id (mk-tab-panel-id id n)           ; drag container
                  delete    (fn []
                              (swap! state state/mk-drag-state n)
                              (vary-meta kv assoc
@@ -80,17 +82,17 @@
                    :ref           focus/accept!
                    :style         (:style (meta kv))
                    :aria-selected selected?
-                   :aria-controls (mk-tab-panel-id id)
+                   :aria-controls panel-id
                    :aria-label    (str "View tab number " (inc n)) ;TODO: localisation
                    :tab-index     (if selected? "0" "-1")
                    :auto-focus    selected?
                    :on-click      select
                    :draggable     true
-                   :on-drag-start (drag/on-drag-start delete)
-                   :on-drag-end   (drag/on-drag-end)
-                   :on-drag-enter (drag/on-drag-enter)
-                   :on-drag-over  (drag/on-drag-over)
-                   :on-drag-leave (drag/on-drag-leave)
+                   :on-drag-start (drag/on-drag-start delete source-id)
+                   :on-drag-end   drag/on-drag-end
+                   :on-drag-enter drag/on-drag-enter
+                   :on-drag-over  drag/on-drag-over
+                   :on-drag-leave drag/on-drag-leave
                    :on-drop       (drag/on-drop insert)}
         k])]))
 
@@ -104,7 +106,7 @@
                        (nth kvs i))]
     (when v
       [:section.tab-panel {:role            "tabpanel"
-                           :id              (mk-tab-panel-id id)
+                           :id              (mk-tab-panel-id id i)
                            :aria-labelledby (mk-tab-id id i)
                            :style           (:style (meta kv))}
        v])))
@@ -117,15 +119,16 @@
     :i   - (optional) the index of the currently selected tab.
 
   Various opts for tab components:
-    :id - a unique id attribute for the tab-list.
+    :id - (optional) a unique id attribute for the tab-list.
 
   ARIA reference:
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]
-  [:article.tabs
-   [tab-list state opts]
-   [tab-panel state opts]])
+  (let [opts (assoc opts :id (or id (random-uuid)))]
+    [:article.tabs
+     [tab-list state opts]
+     [tab-panel state opts]]))
 
 
 ;;;; CAROUSEL
@@ -227,12 +230,13 @@
 
     (fn []
       (let [*state @state]
-        [:pre {:on-drag-over (drag/on-drag-over)
+        [:pre {:on-drag-over drag/on-drag-over
                :on-drop      (drag/on-drop insert)}
          (if (empty? *state)
            [:code.code-lens.code-lens--empty "( )"]
            [:code.code-lens {:draggable     true
-                             :on-drag-start (drag/on-drag-start delete)}
+                             ;; TODO: provide a :source-id
+                             :on-drag-start (drag/on-drag-start delete nil)}
             (when-let [metadata (meta *state)]
               [:div.code-lens__meta {:title "Metadata"}
                "^" (with-out-str (pprint (coll->code metadata)))])

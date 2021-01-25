@@ -131,6 +131,14 @@
 (defn app
   []
   [:<>
+   ;; For testing drag-and-drop between descendants/ancestors.
+   [plastic/tabs (r/atom {:i   0
+                          :kvs [[1 [plastic/tabs (r/atom {:i   2
+                                                          :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]]
+                                [2 "something"]
+                                [3 "glen"]]})]
+   [:br]
+
    [foundation/combination {:vs  [[plastic/carousel facsimile-img]
                                   [plastic/tabs tabs-ratom {:id "ratom"}]]
                             :weights [1 1]}]
