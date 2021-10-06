@@ -27,14 +27,16 @@
 
 (defn heterostyled
   "Apply heterogeneous styling to tab `kvs`."
-  [kvs & [order-fn]]
-  (let [backgrounds (cycle (order-fn background-colours))
-        mk-style    (fn [m n]
-                      (assoc m :style {:background (nth backgrounds n)}))]
-    (into (empty kvs)
-          (map-indexed (fn [n kv]
-                         (vary-meta kv mk-style n))
-                       kvs))))
+  ([kvs]
+   (heterostyled kvs identity))
+  ([kvs order-fn]
+   (let [backgrounds (cycle (order-fn background-colours))
+         mk-style    (fn [m n]
+                       (assoc m :style {:background (nth backgrounds n)}))]
+     (into (empty kvs)
+           (map-indexed (fn [n kv]
+                          (vary-meta kv mk-style n))
+                        kvs)))))
 
 ;; TODO: what to do when drag-and-dropping from tabs using same state?
 ;; Currently, the two tabs components have their tabs reordered, but should
