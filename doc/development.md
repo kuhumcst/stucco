@@ -27,6 +27,13 @@ brew install node
 npm install -g shadow-cljs
 ```
 
+### Node.js dependencies
+No matter the operating system, you will also need to install the JavaScript dependencies. You do it by running this in the project root:
+
+```
+npm install react react-dom create-react-class
+```
+
 Workflow
 --------
 Development of the project is done using the live-reloading capabilities of shadow-cljs:
