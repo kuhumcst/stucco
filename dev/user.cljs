@@ -125,8 +125,9 @@
 ;; Re-frame subscription-like reaction that only updates on the :i key and
 ;; intercepts the :kvs value before rendering.
 (def facsimile-img
-  (let [ks (map first (:kvs @fascimile-text))]
-    (state/derive fascimile-text {:kvs (map vector ks facs)})))
+  (let [ks  (map first (:kvs @fascimile-text))
+        kvs (plastic/heterostyled (map vector ks facs))]
+    (state/derive fascimile-text {:kvs kvs})))
 
 (defn app
   []
@@ -139,9 +140,10 @@
                                 [3 "glen"]]})]
    [:br]
 
-   [foundation/combination {:vs  [[plastic/carousel facsimile-img]
-                                  [plastic/tabs tabs-ratom {:id "ratom"}]]
-                            :weights [1 1]}]
+   [foundation/combination
+    {:vs      [[plastic/carousel facsimile-img]
+               [plastic/tabs tabs-ratom {:id "ratom"}]]
+     :weights [1 1]}]
    [plastic/code code-lens-state]
    [plastic/carousel {:i   0
                       :kvs [[1 [:<>

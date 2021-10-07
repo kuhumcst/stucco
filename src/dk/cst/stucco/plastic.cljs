@@ -157,6 +157,7 @@
                next-slide #(swap! state update :i inc)
                prev-slide #(swap! state update :i dec)]
     (let [{:keys [i kvs]} @state
+          styles       (map (comp :style meta) kvs)
           [label content] (nth kvs i)
           tab-panel-id (random-uuid)
           label-id     (random-uuid)
@@ -172,10 +173,12 @@
                       :aria-labelledby      aria-labelledby}
        [:button.carousel__select {:aria-label (str "View slide number " i) ;TODO: localisation
                                   :tab-index  (if prev? "0" "-1")
-                                  :on-click   (when prev? prev-slide)}]
+                                  :on-click   (when prev? prev-slide)
+                                  :style      (nth styles (dec i) nil)}]
        [:div.carousel__slide {:role            "tabpanel"
                               :id              tab-panel-id
-                              :aria-labelledby label-id}
+                              :aria-labelledby label-id
+                              :style           (nth styles i)}
         (when (> (count kvs) 2)
           [:div.carousel__slide-header
            [:div.carousel__slide-label {:id label-id} label]
@@ -185,6 +188,7 @@
                  (for [n (range (count kvs))
                        :let [selected? (= n i)
                              select    #(swap! state assoc :i n)]]
+                   ;; TODO: carry over background style to dot too
                    [:span.slide-picker__dot {:role          "tab"
                                              :aria-controls tab-panel-id
                                              :aria-selected selected?
@@ -195,7 +199,8 @@
         content]
        [:button.carousel__select {:aria-label (str "View slide number " (inc i)) ;TODO: localisation
                                   :tab-index  (if next? "0" "-1")
-                                  :on-click   (when next? next-slide)}]])))
+                                  :on-click   (when next? next-slide)
+                                  :style      (nth styles (inc i) nil)}]])))
 
 
 ;;;; INSPECTION
