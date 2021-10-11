@@ -179,23 +179,23 @@
                               :id              tab-panel-id
                               :aria-labelledby label-id
                               :style           (nth styles i)}
-        (when (> (count kvs) 2)
-          [:div.carousel__slide-header
-           [:div.carousel__slide-label {:id label-id} label]
+        [:div.carousel__slide-header
+         [:div.carousel__slide-label {:id label-id} label]
+         (when (> (count kvs) 1)
            (into [:div.slide-picker {:role        "tablist"
                                      :on-key-down kbd/roving-tabindex-handler
                                      :aria-label  "Choose a slide to display"}] ;TODO: localisation
                  (for [n (range (count kvs))
                        :let [selected? (= n i)
                              select    #(swap! state assoc :i n)]]
-                   ;; TODO: carry over background style to dot too
                    [:span.slide-picker__dot {:role          "tab"
                                              :aria-controls tab-panel-id
                                              :aria-selected selected?
                                              :tab-index     (if selected?
                                                               "0"
                                                               "-1")
-                                             :on-click      select}]))])
+                                             :on-click      select}])))]
+        [:div.carousel__slide-separator]
         content]
        [:button.carousel__select {:aria-label (str "View slide number " (inc i)) ;TODO: localisation
                                   :tab-index  (if next? "0" "-1")

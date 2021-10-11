@@ -11,20 +11,21 @@
     cursor: pointer;
     height: var(--grid-12);
     width: var(--grid-12);
-    background-color: var(--color-subtle);
     border-radius: 50%;
+    background: var(--color);
+    filter: opacity(0.5);
     display: inline-block;
 }
 
 .slide-picker__dot:hover {
-    background-color: var(--color);
+    filter: opacity(1);
 }
 
 .slide-picker__dot[aria-selected=true] {
     cursor: default;
     height: var(--grid-16);
     width: var(--grid-16);
-    background-color: var(--color);
+    filter: opacity(1);
 }
 
 .slide-picker__dot + .slide-picker__dot {
@@ -49,14 +50,21 @@
     display: flex;
     justify-content: space-between;
     padding-bottom: var(--margin);
-    margin-bottom: var(--margin-l);
-    border-bottom: var(--border-very-subtle);
 }
 
 .carousel__slide-label {
     color: var(--color);
     font-family: var(--font-family-metadata);
     font-size: var(--grid-12);
+}
+
+/* Used in lieu of header border style as it allows for alpha effects. */
+.carousel__slide-separator {
+    height: 1px;
+    width: 100%;
+    background: var(--color);
+    filter: opacity(0.25);
+    margin-bottom: var(--margin-l);
 }
 
 /* TODO: remove 1px invisible border */

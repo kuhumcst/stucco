@@ -30,7 +30,6 @@
     --grid-64: 64px;
 
     /* Variations. */
-    --border-very-subtle: 1px solid #DDD;
     --box-shadow-hidden: 0 0 0 0 rgba(0,0,0,0);
     --color-subtle: #AAA;
     --color-very-subtle: #DDD;
