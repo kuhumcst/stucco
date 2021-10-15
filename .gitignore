@@ -242,6 +242,7 @@ temp/
 /resources/public/js/test
 .idea
 .shadow-cljs
+package.json
 package-lock.json
 *.DS_store
 *.iml
