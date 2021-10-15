@@ -11,7 +11,7 @@ The library is still very much in the [hammock stage](https://www.youtube.com/wa
 It is currently being used - together with [rescope](https://github.com/kuhumcst/rescope) - to build the [glossematics](https://github.com/kuhumcst/glossematics) archival website as part of the _"Infrastrukturalisme"_ project, a joint effort between the University of Copenhagen and Aarhus University.
 
 ### Components
-Stucco components can be divided into three separate types, each given their own namespace:
+Stucco components can be divided into four separate types, each given their own namespace:
 
 * `dk.cst.stucco.document`: Document components are comparable to typical reusable components found in libraries such as [re-com](https://github.com/day8/re-com). The primary purpose of a Document component is to provide a basic level of interactivity expected for simple pieces of data. An example might be the `illustration` component which can be used in place of the HTML `[:img]` element.
 * `dk.cst.stucco.group`: Group components are used to group other components in a loose manner, while allowing the user to manipulate the layout within the group.
