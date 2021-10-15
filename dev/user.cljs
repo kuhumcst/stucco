@@ -4,9 +4,10 @@
             [reagent.dom :as rdom]
             [reagent.ratom :as ratom]
             [dk.cst.stucco.util.state :as state]
-            [dk.cst.stucco.foundation :as foundation]
-            [dk.cst.stucco.surface :as doc]
-            [dk.cst.stucco.plastic :as plastic]))
+            [dk.cst.stucco.landmark :as landmark]
+            [dk.cst.stucco.group :as group]
+            [dk.cst.stucco.pattern :as pattern]
+            [dk.cst.stucco.document :as doc]))
 
 (def lorem-ipsum-1
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -47,9 +48,9 @@
                             [:p lorem-ipsum-1]]]]}))
 
 (def tabs-big
-  [["First" ^{:key (random-uuid)} [plastic/carousel fascimile-text
+  [["First" ^{:key (random-uuid)} [pattern/carousel fascimile-text
                                    {:aria-label "Test"}]]
-   ["Second" ^{:key (random-uuid)} [plastic/carousel {:i   0
+   ["Second" ^{:key (random-uuid)} [pattern/carousel {:i   0
                                                       :kvs [[1 1]]}]]
    ["Third" [:<>
              [:h1 "More lorem ipsum"]
@@ -71,7 +72,7 @@
    ["4" "Four"]])
 
 (defonce tabs-ratom
-  (r/atom {:kvs (plastic/heterostyled tabs-big shuffle)
+  (r/atom {:kvs (pattern/heterostyled tabs-big shuffle)
            :i   0}))
 
 (defonce tabs-ratom-for-cursor
@@ -126,37 +127,37 @@
 ;; intercepts the :kvs value before rendering.
 (def facsimile-img
   (let [ks  (map first (:kvs @fascimile-text))
-        kvs (plastic/heterostyled (map vector ks facs))]
+        kvs (pattern/heterostyled (map vector ks facs))]
     (state/derive fascimile-text {:kvs kvs})))
 
 (defn app
   []
   [:<>
    ;; For testing drag-and-drop between descendants/ancestors.
-   [plastic/tabs (r/atom {:i   0
-                          :kvs [[1 [plastic/tabs (r/atom {:i   2
+   [pattern/tabs (r/atom {:i   0
+                          :kvs [[1 [pattern/tabs (r/atom {:i   2
                                                           :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]]
                                 [2 "something"]
                                 [3 "glen"]]})]
    [:br]
 
-   [foundation/combination
-    {:vs      [[plastic/carousel facsimile-img]
-               [plastic/tabs tabs-ratom {:id "ratom"}]]
+   [group/combination
+    {:vs      [[pattern/carousel facsimile-img]
+               [pattern/tabs tabs-ratom {:id "ratom"}]]
      :weights [1 1]}]
-   [plastic/code code-lens-state]
-   [plastic/carousel {:i   0
+   [pattern/code code-lens-state]
+   [pattern/carousel {:i   0
                       :kvs [[1 [:<>
                                 [:p lorem-ipsum-1]
                                 [:p lorem-ipsum-2]]]
                             [2 lorem-ipsum-1]
                             [3 lorem-ipsum-2]]}]
    [:br]
-   [plastic/carousel (r/atom {:i   2
+   [pattern/carousel (r/atom {:i   2
                               :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
    [:br]
 
-   #_[foundation/root landmarks]
+   #_[landmark/root landmarks]
 
    ;; Using ratom as state.
    ;[tabs tabs-ratom {:id "ratom"}]
@@ -166,21 +167,21 @@
    #_[:pre
       "cursor: " (with-out-str (pprint @tabs-cursor))
       "original ratom: \n" (with-out-str (pprint @tabs-ratom-for-cursor))]
-   [plastic/tabs tabs-cursor {:id "cursor"}]
+   [pattern/tabs tabs-cursor {:id "cursor"}]
    [:br]
 
    ;; Using reaction as state.
    #_[:pre
       "reaction ratom: " (with-out-str (pprint @tabs-reaction))
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-reaction))]
-   [plastic/tabs tabs-reaction {:id "reaction"}]
+   [pattern/tabs tabs-reaction {:id "reaction"}]
    [:br]
 
    ;; Using wrap as state.
    #_[:pre
       "wrapper ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))
       "original ratom: " (with-out-str (pprint @tabs-ratom-for-wrapper))]
-   [plastic/tabs (r/wrap @tabs-ratom-for-wrapper
+   [pattern/tabs (r/wrap @tabs-ratom-for-wrapper
                          reset! tabs-ratom-for-wrapper)
     {:id "wrapper"}]
    [:br]])

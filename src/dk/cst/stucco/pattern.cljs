@@ -1,4 +1,16 @@
-(ns dk.cst.stucco.plastic
+(ns dk.cst.stucco.pattern
+  "Reagent component implementations of common WAI-ARIA patterns.
+
+  These components try to match the WAI-ARIA example patterns as closely as
+  possible. The implementations include common interface elements such as
+  carousels and tabbed panels.  Ideally, these comprise the second (or a lower)
+  level in a layout, with the top level composed of WAI-ARIA landmarks
+  (available in the 'dk.cst.stucco.landmark' namespace).
+
+  For looser groupings, take a look at the 'dk.cst.stucco.group' namespace.
+
+  ARIA references:
+    https://www.w3.org/TR/wai-aria-practices-1.1/#aria_ex"
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [clojure.pprint :refer [pprint]]

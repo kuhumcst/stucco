@@ -1,10 +1,11 @@
-(ns dk.cst.stucco.surface
-  "Mostly dumb components meant to replace common HTML elements.
+(ns dk.cst.stucco.document
+  "Simple reagent components meant to replace common HTML elements, providing
+  useful interactive benefits and some validation.
 
-  Unlike the more complex widget components, the document components do not take
-  any injected state. Rather, as they are meant to replace common HTML elements,
-  they take an HTML `attr` map and (when applicable) contained HTML `content`
-  as input args."
+  Unlike the more complex components located in e.g. 'dk.cst.stucco.pattern',
+  the document components do not take any injected state. Rather, as they are
+  meant to replace common HTML elements, they take an HTML `attr` map and (when
+  applicable) contained HTML `content` as input args."
   (:require [reagent.core :as r]))
 
 (defn- assert-alt
