@@ -98,6 +98,9 @@
     :as   landmarks}]
   (assert-single-element "banner" banner)
   (assert-single-element "main" main)
+  ;; TODO: should probably be a container div to allow for styling?
+  ;; Maybe use holy grail as default? https://youtu.be/qm0IfG1GyZU?t=465
+  ;; Example: https://www.w3.org/TR/wai-aria-practices-1.1/examples/landmarks/
   [:<>
    banner
    main
