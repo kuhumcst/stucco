@@ -97,18 +97,27 @@
            :i   1}))
 
 (def landmarks
-  {:banner        [foundation/banner
-                   [foundation/search {:aria-label "ib"}
-                    "banner > search"]]
-   :complementary [foundation/complementary {:aria-label "john"}
-                   [foundation/form {:aria-label "karsten"}
-                    "complementary > form"]]
-   :content-info  [foundation/content-info
-                   [foundation/region {:aria-label "palle"}
-                    "contentinfo > region"]]
-   :main          [foundation/main
-                   [foundation/navigation {:aria-label "ludvig"}
-                    "main > navigation"]]})
+  {:banner        [landmark/banner {:style {:background "yellow"}}
+                   "banner"
+                   [landmark/search {:aria-label "search label"
+                                     :style      {:background "orange"}}
+                    "search"]]
+   :complementary [landmark/complementary {:aria-label "complementary label"
+                                           :style      {:background "red"}}
+                   "complementary"
+                   [landmark/form {:aria-label "form label"
+                                   :style      {:background "brown"}}
+                    "form"]]
+   :content-info  [landmark/content-info {:style {:background "grey"}}
+                   "contentinfo"
+                   [landmark/region {:aria-label "region label"
+                                     :style      {:background "lightgrey"}}
+                    "region"]]
+   :main          [landmark/main {:style {:background "green"}}
+                   "main"
+                   [landmark/navigation {:aria-label "navigation label"
+                                         :style      {:background "lightgreen"}}
+                    "navigation"]]})
 
 (defonce code-lens-state
   (r/atom nil))
@@ -133,6 +142,9 @@
 (defn app
   []
   [:<>
+   [landmark/root landmarks]
+   [:br]
+
    ;; For testing drag-and-drop between descendants/ancestors.
    [pattern/tabs (r/atom {:i   0
                           :kvs [[1 [pattern/tabs (r/atom {:i   2
@@ -156,8 +168,6 @@
    [pattern/carousel (r/atom {:i   2
                               :kvs [[1 "testing"] [2 "a"] [3 "ratom"]]})]
    [:br]
-
-   #_[landmark/root landmarks]
 
    ;; Using ratom as state.
    ;[tabs tabs-ratom {:id "ratom"}]
