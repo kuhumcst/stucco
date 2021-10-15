@@ -20,6 +20,23 @@ Stucco components can be divided into four separate types, each given their own 
 
 The components allow you to construct a user interface that can adapt to various end user requirements without resulting in configurations that become too strange. When combined, Stucco components also compose into highly accessible web applications.<sup>[2](#notes-vision)</sup>
 
+### CSS
+Each of the four Stucco component types have an accompanying CSS file:
+
+* `document.css` for the `dk.cst.stucco.document` namespace
+* `group.css` for the `dk.cst.stucco.group` namespace
+* `pattern.css` for the `dk.cst.stucco.pattern` namespace
+* `landmark.css` for the `dk.cst.stucco.landmark` namespace
+
+If _any_ component from one of the namespaces is in use, the accompanying CSS file must also be loaded on the page!
+
+In addition, two other CSS files are _always_ required:
+
+* `theme.css` - Contains user-defined vars used to adjust the overall look. Can be uses _as-is_ or modified.
+* `shared.css` - Contains shared CSS used across different components.
+
+The [BEM convention](http://getbem.com/) is used throughout the CSS files. In fact, some ClojureScript functionality relies directly on BEM classes. Such functionality is implemented in `dk.cst.stucco.dom.bem` and used in e.g. `dk.cst.stucco.dom.drag` to support drag-and-drop functionality.
+
 Development
 -----------
 The development workflow of the library itself is built around the [Clojure CLI](https://clojure.org/reference/deps_and_cli) for managing dependencies and [shadow-cljs](https://github.com/thheller/shadow-cljs) for compiling ClojureScript code and providing a live-reloading development environment.<sup>[3](#notes-development)</sup>

@@ -1,3 +1,5 @@
+/* === TABS === */
+
 .tab-list {
     display: flex;
     height: 36px; /* TODO: calculate dynamically? */
@@ -134,4 +136,145 @@
 .tab-list + .tab-panel {
     border-top: none;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+
+
+/* === CAROUSEL === */
+
+.slide-picker {
+    display: flex;
+    min-height: var(--grid-16);
+    justify-content: center;
+    align-items: center;
+    margin-left: var(--grid-8);
+}
+
+.slide-picker__dot {
+    transition: var(--transition);
+    cursor: pointer;
+    height: var(--grid-12);
+    width: var(--grid-12);
+    border-radius: 50%;
+    background: var(--color);
+    filter: opacity(0.5);
+    display: inline-block;
+}
+
+.slide-picker__dot:hover {
+    filter: opacity(1);
+}
+
+.slide-picker__dot[aria-selected=true] {
+    cursor: default;
+    height: var(--grid-16);
+    width: var(--grid-16);
+    filter: opacity(1);
+}
+
+.slide-picker__dot + .slide-picker__dot {
+    margin-left: var(--margin);
+}
+
+.carousel {
+    display: flex;
+    justify-content: center;
+}
+
+.carousel__slide {
+    transition: var(--transition);
+    flex-grow: 1;
+    padding: var(--padding-l);
+    background: var(--background);
+    border: var(--border);
+    border-radius: var(--border-radius);
+}
+
+.carousel__slide-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: var(--margin);
+}
+
+.carousel__slide-label {
+    color: var(--color);
+    font-family: var(--font-family-metadata);
+    font-size: var(--grid-12);
+}
+
+/* Used in lieu of header border style as it allows for alpha effects. */
+.carousel__slide-separator {
+    height: 1px;
+    width: 100%;
+    background: var(--color);
+    filter: opacity(0.25);
+    margin-bottom: var(--margin-l);
+}
+
+/* TODO: remove 1px invisible border */
+button.carousel__select {
+    min-width: 0; /* Dummy value to allow for transitions. */
+    margin: var(--grid-12) 0 var(--grid-12) 0;
+    padding: 0;
+    transition: var(--transition);
+    background: var(--background);
+    filter: var(--inactive-filter);
+    border: var(--border);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-right: none; /* Only before visible slides. */
+    opacity: 0;
+    box-shadow: inset -4px 0px 8px 0px rgba(0,0,0,0.15);
+}
+
+/* Removes the left border instead of the right. */
+.carousel__slide ~ button.carousel__select {
+    border: var(--border);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    border-left: none;
+    box-shadow: inset 4px 0px 8px 0px rgba(0,0,0,0.15);
+}
+
+button.carousel__select[tabindex="0"] {
+    min-width: var(--grid-16);
+    opacity: 1;
+    cursor: pointer;
+}
+
+button.carousel__select[tabindex="0"]:hover {
+    margin: var(--grid-8) 0 var(--grid-8) 0;
+}
+
+button.carousel__select:hover,
+button.carousel__select:focus {
+    cursor: click;
+    filter: var(--inactive-filter-focus);
+}
+
+
+
+/* === LENS === */
+
+.code-lens {
+    display: block;
+    overflow: auto;
+    background: var(--background);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    font-size: var(--font-size);
+}
+
+.code-lens--empty {
+    display: inline-block;
+    color: var(--inactive-color);
+}
+
+.code-lens__meta {
+    color: darkblue; /* TODO: theme it? */
+    background: #EEEEFF; /* TODO: theme it? */
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-s);
+    font-style: italic;
+    margin-bottom: var(--margin);
 }

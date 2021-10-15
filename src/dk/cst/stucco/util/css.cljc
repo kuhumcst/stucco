@@ -3,13 +3,11 @@
   (:require [shadow.resource :as resource]
             [clojure.string :as str]))
 
-;; TODO: reorganise CSS to match namespace names
 (def resources
-  {:carousel (resource/inline "public/css/carousel.css")
-   :lens     (resource/inline "public/css/lens.css")
-   :tabs     (resource/inline "public/css/tabs.css")
-   :document (resource/inline "public/css/document.css")
-   :layout   (resource/inline "public/css/layout.css")
+  {:document (resource/inline "public/css/document.css")
+   :group    (resource/inline "public/css/group.css")
+   :pattern  (resource/inline "public/css/pattern.css")
+   :landmark (resource/inline "public/css/landmark.css")
    :shared   (resource/inline "public/css/shared.css")})
 
 (def default-theme
