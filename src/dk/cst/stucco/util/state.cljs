@@ -122,3 +122,23 @@
                 (swap! parent merge (select-keys newstate shared-ks)))
 
       :auto-run true)))
+
+(defn ghost
+  "Create a ghost of existing `src` state and a `kmap` of keys to be renamed.
+  Optionally: provide a `path` to use a cursor rather than the `src` itself.
+
+  The intention of this function is to allow two separate components to share
+  source state while focusing on different aspects of it, e.g. the components
+  might want to share the :i key, while having separate values for :kvs."
+  ([src kmap]
+   (ghost src nil kmap))
+  ([src path kmap]
+   (let [state      (if path (ratom/cursor src path) src)
+         small-kmap (remove (partial apply =) kmap)         ; optimization
+         inv-kmap   (set/map-invert small-kmap)]
+     (ratom/make-reaction
+       #(-> (deref state)
+            (select-keys (keys kmap))
+            (set/rename-keys small-kmap))
+       :on-set #(apply swap! state merge (set/rename-keys %2 inv-kmap))
+       :auto-run true))))
