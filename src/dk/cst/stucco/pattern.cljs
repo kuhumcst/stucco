@@ -139,7 +139,8 @@
     https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel"
   [{:keys [kvs i] :as state}
    {:keys [id] :as opts}]
-  (let [opts (assoc opts :id (or id (random-uuid)))]
+  (let [state (state/prepare ::state/kvs+i state)
+        opts  (assoc opts :id (or id (random-uuid)))]
     [:article.tabs
      [tab-list state opts]
      [tab-panel state opts]]))
