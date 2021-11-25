@@ -12,11 +12,15 @@
 
 .combination__separator {
     transition: var(--transition);
+    cursor: col-resize;
+    background-color: black;
+    background-clip: content-box; /* stops background bleeding into border. */
+    border-radius: var(--grid-8);
+    border: 4px solid transparent;
+    opacity: 0;
 }
 
 .combination__separator:hover,
 .combination__separator--resize {
-    background: #F0F0F0;
-    border-radius: var(--grid-8);
-    cursor: col-resize;
+    opacity: 0.1;
 }
